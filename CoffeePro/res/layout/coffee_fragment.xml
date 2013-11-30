@@ -1,0 +1,140 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:accordion="http://schemas.android.com/apk/res-auto/com.sentaca.android.accordion"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+    <com.sentaca.android.accordion.widget.AccordionView
+            android:id="@+id/accordion_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            accordion:header_layout_fold_button_id="@id/foldButton"
+            accordion:header_layout_id="@layout/accordion_header"
+            accordion:header_layout_label_id="@id/foldText"
+            accordion:section_bottom="@layout/accordion_footer"
+            accordion:section_container="@layout/accordion_section"
+            accordion:section_container_parent="@id/section_content"
+            accordion:section_headers="@array/fp_headers"
+            accordion:section_visibility="@array/accordion_visibility"
+            android:orientation="vertical" >
+            <LinearLayout android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">			    
+			    <TextView
+			        android:id="@+id/groundsTextView"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content" 
+				    android:textStyle="italic"
+				    android:textSize="14sp"/>	    
+			    <TextView
+			        android:id="@+id/instructionsTextView"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cupLayout"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+			    <LinearLayout android:orientation="horizontal"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:gravity="center_horizontal|center_vertical">
+	                <Spinner android:id="@+id/unitSpinner"
+	                    android:layout_width="0dp"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="1"
+	                    android:entries="@array/units"/>
+	                <TextView android:text="@string/totalCups"
+			    	    android:layout_width="0dp"
+			    	    android:layout_height="wrap_content"
+			    	    android:layout_weight="1"
+			    	    android:gravity="center_horizontal"/>
+	                <TextView android:text="@string/totalCoffee"
+			    	    android:layout_width="0dp"
+			    	    android:layout_height="wrap_content"
+			    	     android:layout_weight="1"
+			    	     android:gravity="center_horizontal"/>
+	            </LinearLayout>          
+
+				<LinearLayout 
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:gravity="center_horizontal|center_vertical"
+				    android:orientation="horizontal" >
+
+				    <LinearLayout 
+				        android:orientation="horizontal"
+		                android:layout_width="0dp"
+		                android:layout_height="wrap_content"
+		                android:gravity="center_horizontal|center_vertical"
+		                android:layout_weight="1">
+				    	<TextView android:id="@+id/groundsWeight"
+				    	    android:layout_width="wrap_content"
+				    	    android:layout_height="wrap_content"/>
+				    </LinearLayout>
+			    	<NumberPicker android:id="@+id/cupsPicker"
+			    	    android:layout_width="0dp"
+			    	    android:layout_height="wrap_content"
+			    	    android:layout_weight="0.75"/>
+			    	<LinearLayout android:orientation="horizontal"
+		                android:layout_width="0dp"
+		                android:layout_height="wrap_content"
+		                android:gravity="center_horizontal|center_vertical"
+		                android:layout_weight="1">
+				    	<TextView android:id="@+id/totalGrounds"
+				    	    android:layout_width="wrap_content"
+				    	    android:layout_height="wrap_content"/>
+				    	<TextView android:id="@+id/totalGroundsUnits"
+				    	    android:layout_width="wrap_content"
+				    	    android:layout_height="wrap_content"/>
+				    </LinearLayout>
+			    </LinearLayout>
+            </LinearLayout>
+		    <LinearLayout android:id="@+id/timerLayout"
+		        android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+		    	<TextView
+			        android:id="@+id/timerValue"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:textSize="40sp"
+			        android:textColor="#ffffff"
+			        android:text="@string/timerVal" />
+		    	<LinearLayout android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal">
+				    <Button
+				        android:id="@+id/startButton"
+				        android:layout_width="90dp"
+				        android:layout_height="45dp"
+				        android:text="@string/startButtonLabel" />
+				    <Button
+				        android:id="@+id/pauseButton"
+				        android:layout_width="90dp"
+				        android:layout_height="45dp"
+				        android:text="@string/resetButtonLabel" />
+			    </LinearLayout>
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical"
+			    android:layout_width="wrap_content"
+			    android:layout_height="fill_parent">
+			    <RatingBar
+			        android:id="@+id/ratingBar"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" />
+			    <EditText
+				    android:id="@+id/comments"
+				    android:gravity="left"
+				    android:layout_height="fill_parent"
+				    android:layout_width="fill_parent"
+				    android:maxLines="4"
+				    android:lines="4"
+				    android:hint="@string/comments"/>
+			</LinearLayout>
+	</com.sentaca.android.accordion.widget.AccordionView>
+
+</ScrollView>

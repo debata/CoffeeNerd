@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CoffeeNerd</string>
+    <string name="greeting">Developed by HashBang Software</string>
+    <string name="email">hashbangsoftware@gmail.com</string>
+    <string name="action_settings">Settings</string>
+    <string name="resetButtonLabel">Reset</string>
+    <string name="startButtonLabel">Start</string>
+    <string name="timerVal">00:00</string>
+    <string-array name="coffee_options">
+        <item>French Press</item>
+        <item>Chemex</item>
+        <item>Siphon Pot</item>
+        <item>AeroPress</item>
+        <item>About</item>
+    </string-array>
+    <string-array name="fp_types">
+        <item>Standard</item>
+        <item>Dark</item>
+        <item>Light</item>  
+    </string-array>
+    <string-array name="units">
+        <item>Grams</item>
+        <item>Ounces</item>
+    </string-array>
+    <string-array name="fp_headers">
+        <item>Instructions</item>
+        <item>Beans Calculator</item>
+        <item>Brew Timer</item>
+        <item>Notes</item>    
+    </string-array>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="fp_instruction">Instructions</string>
+    <string name="fp_grounds">Grounds</string>
+    <string name="grams">g/</string>
+    <string name="ounces">oz</string>
+    <string name="totalCups">Number of Cups</string>
+    <string name="totalCoffee">Total Coffee Weight</string>
+    <string name="comments">Comments</string>
+	<string name="refs">References</string>
+    <string name="bodum_link"><a href="http://www.bodum.com">Bodum</a></string>
+    <string name="chemex_link"><a href="http://www.chemexcoffeemaker.com">Chemex Coffeemaker</a></string>
+    <string name="stump_link"><a href="http://stumptowncoffee.com/">StumpTown Coffee Roasters</a></string>
+</resources>

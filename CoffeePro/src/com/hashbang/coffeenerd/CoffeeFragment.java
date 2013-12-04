@@ -1,4 +1,4 @@
-package com.hashbang.coffeepro;
+package com.hashbang.coffeenerd;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -32,6 +32,7 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.hashbang.coffeepro.R;
 import com.sentaca.android.accordion.widget.AccordionView;
 
 public class CoffeeFragment extends Fragment implements

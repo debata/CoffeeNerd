@@ -1,4 +1,6 @@
-package com.hashbang.coffeepro;
+package com.hashbang.coffeenerd;
+
+import com.hashbang.coffeepro.R;
 
 import android.app.ActionBar;
 import android.app.Activity;

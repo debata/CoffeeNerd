@@ -1,1 +1,12 @@
 INDEX VERSION 1.126+D:\Workspace\CoffeeNerd\.metadata\.plugins\org.eclipse.jdt.core
+<<<<<<< HEAD
+=======
+2840911280.index
+54950736.index
+966593203.index
+3288273350.index
+1764729084.index
+1444475590.index
+3196852126.index
+1122178717.index
+>>>>>>> dev

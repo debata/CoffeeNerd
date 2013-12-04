@@ -1,4 +1,4 @@
-package com.hashbang.coffeepro;
+package com.hashbang.coffeenerd;
 
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.hashbang.coffeepro.R;
 
 public class MainActivity extends SherlockFragmentActivity
 {

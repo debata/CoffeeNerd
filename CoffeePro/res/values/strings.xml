@@ -43,4 +43,6 @@
     <string name="bodum_link"><a href="http://www.bodum.com">Bodum</a></string>
     <string name="chemex_link"><a href="http://www.chemexcoffeemaker.com">Chemex Coffeemaker</a></string>
     <string name="stump_link"><a href="http://stumptowncoffee.com/">StumpTown Coffee Roasters</a></string>
+    <string name="save">SAVE</string>
+    <string name="save_msg">Notes saved successfully</string>
 </resources>

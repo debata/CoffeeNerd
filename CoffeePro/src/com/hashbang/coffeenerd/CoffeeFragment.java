@@ -17,10 +17,8 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnTouchListener;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -31,6 +29,7 @@ import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hashbang.coffeepro.R;
 import com.sentaca.android.accordion.widget.AccordionView;
@@ -60,6 +59,7 @@ public class CoffeeFragment extends Fragment implements
     private Spinner unitSpinner;
     private AccordionView accordionView;
     private RatingBar ratingBar;
+    private Button saveButton;
 
     private EditText commentView;
     private TextView timerValue;
@@ -288,43 +288,34 @@ public class CoffeeFragment extends Fragment implements
                         .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
             }
         });
+        
+        
 
         ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
         ratingBar.setRating(sharedPref.getFloat(RATE_TAG + type, 0f));
-        ratingBar.setOnTouchListener(new OnTouchListener()
-        {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                SharedPreferences.Editor editor = sharedPref.edit();
-                float rating = ratingBar.getRating();
-                editor.putFloat(RATE_TAG + type, rating);
-                editor.commit();
-                return false;
-            }
-        });
 
         commentView = (EditText) rootView.findViewById(R.id.comments);
         commentView.setText(sharedPref.getString(COMMENT_TAG + type, ""));
-        commentView.setOnFocusChangeListener(new OnFocusChangeListener()
-        {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus)
-            {
-                if(hasFocus)
-                {
-                } // Do Nothing
-                else
-                {
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    String comment = commentView.getText().toString();
-                    editor.putString(COMMENT_TAG + type, comment);
-                    editor.commit();
-                }
-            }
-        });
 
+        saveButton = (Button) rootView.findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new OnClickListener()
+        {
+        	
+        	@Override
+        	public void onClick(View v) 
+        	{
+        		SharedPreferences.Editor editor = sharedPref.edit();
+        		float rating = ratingBar.getRating();
+        		editor.putFloat(RATE_TAG + type, rating);
+        		
+        		String comment = commentView.getText().toString();
+        		editor.putString(COMMENT_TAG + type, comment);
+        		editor.commit();
+        		
+        		Toast.makeText(mainActivity, mainActivity.getResources().getText(R.string.save_msg), Toast.LENGTH_SHORT).show();
+        	}
+        });
+        
         switch (type)
         {
             case 0:

@@ -121,7 +121,8 @@
 			</LinearLayout>
 			<LinearLayout android:orientation="vertical"
 			    android:layout_width="wrap_content"
-			    android:layout_height="fill_parent">
+			    android:layout_height="fill_parent"
+			    android:gravity="center_horizontal">
 			    <RatingBar
 			        android:id="@+id/ratingBar"
 			        android:layout_width="wrap_content"
@@ -134,6 +135,11 @@
 				    android:maxLines="4"
 				    android:lines="4"
 				    android:hint="@string/comments"/>
+			    <Button
+			        android:id="@+id/save_button"
+			        android:layout_height="wrap_content"
+			        android:layout_width="wrap_content"
+			        android:text="@string/save"/>
 			</LinearLayout>
 	</com.sentaca.android.accordion.widget.AccordionView>
 

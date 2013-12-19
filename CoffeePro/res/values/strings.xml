@@ -13,7 +13,8 @@
         <item>Chemex</item>
         <item>Siphon Pot</item>
         <item>AeroPress</item>
-        <item>About</item>
+        <item>Preferences</item><item>About</item>
+        
     </string-array>
     <string-array name="fp_types">
         <item>Standard</item>
@@ -34,8 +35,12 @@
     <string name="drawer_close">Close</string>
     <string name="fp_instruction">Instructions</string>
     <string name="fp_grounds">Grounds</string>
-    <string name="grams">g/</string>
+    <string name="volume_unit">Water Volume Unit</string>
+    <string name="mass_unit">Coffee Mass Unit</string>
+    <string name="grams">g</string>
     <string name="ounces">oz</string>
+    <string name="millilitres">ml</string>
+    <string name="cups">cup</string>
     <string name="totalCups">Number of Cups</string>
     <string name="totalCoffee">Total Coffee Weight</string>
     <string name="comments">Comments</string>

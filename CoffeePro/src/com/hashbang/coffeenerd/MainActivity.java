@@ -73,7 +73,7 @@ public class MainActivity extends SherlockFragmentActivity
         // Generate icon
         icon = new int[]
         { R.drawable.french, R.drawable.chemex, R.drawable.siphon,
-                R.drawable.aero, R.drawable.ic_menu_info_details };
+                R.drawable.aero,R.drawable.ic_sysbar, R.drawable.ic_menu_info_details };
 
         // Locate DrawerLayout in drawer_main.xml
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -178,7 +178,13 @@ public class MainActivity extends SherlockFragmentActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, cf)
                     .commit();
         }
-        else
+        else if(position == 4) //Preferences Fragment
+        {
+        	PreferencesFragment pf = PreferencesFragment.newInstance();
+        	 fragmentManager.beginTransaction().replace(R.id.content_frame, pf)
+             .commit();
+        }
+        else //Show About Fragment
         {
            AboutFragment af = AboutFragment.newInstance();
            fragmentManager.beginTransaction().replace(R.id.content_frame, af)

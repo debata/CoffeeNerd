@@ -50,4 +50,5 @@
     <string name="stump_link"><a href="http://stumptowncoffee.com/">StumpTown Coffee Roasters</a></string>
     <string name="save">SAVE</string>
     <string name="save_msg">Notes saved successfully</string>
+    <string name="cup_warning">Note: 1 Cup = 4 fl. oz</string>
 </resources>

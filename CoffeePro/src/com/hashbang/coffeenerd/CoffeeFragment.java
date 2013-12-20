@@ -16,12 +16,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +36,8 @@ import com.sentaca.android.accordion.widget.AccordionView;
 public class CoffeeFragment extends Fragment implements
         ActionBar.OnNavigationListener
 {
-    public static CoffeeFragment newInstance(int fragmentType)
+
+	public static CoffeeFragment newInstance(int fragmentType)
     {
         // Supply index input as an argument.
         CoffeeFragment f = new CoffeeFragment();
@@ -55,7 +55,9 @@ public class CoffeeFragment extends Fragment implements
     private TextView groundWeightView;
     private TextView totalGroundsView;
     private TextView totalGroundsUnitsView;
-    private NumberPicker cupPicker;
+    private TextView massLabel;
+    private TextView volumeLabel;
+    private NumberPicker waterVolumePicker;
     private Spinner unitSpinner;
     private AccordionView accordionView;
     private RatingBar ratingBar;
@@ -74,29 +76,21 @@ public class CoffeeFragment extends Fragment implements
 
     long timerStartValue = 5000L;
     final private static long STANDARD_TIMER = 240000L;
-    final private static float STANDARD_WEIGHT_G = 7f;
-
-    final private static float STANDARD_WEIGHT_OZ = 0.25f;
     final private static long DARK_TIMER = 360000L;
-    final private static float DARK_WEIGHT_G = 10.5f;
-
-    final private static float DARK_WEIGHT_OZ = 0.375f;
     final private static long LIGHT_TIMER = 120000L;
-    final private static float LIGHT_WEIGHT_G = 7f;
-    final private static float LIGHT_WEIGHT_OZ = 0.25f;
+
     protected static final String COMMENT_TAG = "Comment";
-
     protected static final String RATE_TAG = "Rate";
-    private float weightGrams;
-
-    private float weightOunces;
     static boolean isStarted = false;
 
     int type = 0;
+    
+    private float ratio;
+    String volumeUnit;
+    String massUnit;
 
     private Runnable updateTimerThread = new Runnable()
     {
-
         @Override
         public void run()
         {
@@ -162,7 +156,15 @@ public class CoffeeFragment extends Fragment implements
                 "Partial WakeLock");
 
         sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-
+        
+        volumeUnit = sharedPref.getString(PreferencesFragment.VOLUME_TAG, "ml");
+        massUnit = sharedPref.getString(PreferencesFragment.MASS_TAG, "g");
+        
+        volumeLabel = (TextView) rootView.findViewById(R.id.volumeLabel);
+        volumeLabel.setText(volumeUnit);
+        massLabel = (TextView) rootView.findViewById(R.id.massLabel);
+        massLabel.setText(massUnit);
+        
         // Set up the dropdown menu in the action bar
         ActionBar mActionbar = mainActivity.getActionBar();
         mActionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -183,30 +185,32 @@ public class CoffeeFragment extends Fragment implements
         accordionView = (AccordionView) rootView
                 .findViewById(R.id.accordion_view);
 
-        unitSpinner = (Spinner) rootView.findViewById(R.id.unitSpinner);
-        unitSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
-        {
-
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                    int position, long id)
-            {
-                setWeightValues();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0)
-            {
-                // TODO Auto-generated method stub
-            }
-
-        });
-
         // Set up the picker for number of cups (Cannot be done in XML)
-        cupPicker = (NumberPicker) rootView.findViewById(R.id.cupsPicker);
-        cupPicker.setMinValue(1);
-        cupPicker.setMaxValue(99);
-        cupPicker
+        waterVolumePicker = (NumberPicker) rootView.findViewById(R.id.cupsPicker);
+        if("cup".equalsIgnoreCase(volumeUnit))
+        {
+	        waterVolumePicker.setMinValue(1);
+	        waterVolumePicker.setMaxValue(99);
+        }
+        else
+        {
+        	int maxValue = 2005;
+        	int step = 5;
+
+        	String[] valueSet = new String[maxValue/step];
+        	
+        	int value = 0;
+        	for (int i = 0; i <= 400; i++)
+        	{
+        	    valueSet[i] = String.valueOf(value);
+        	    value += step;
+        	}
+        	waterVolumePicker.setMinValue(0);
+        	waterVolumePicker.setMaxValue(400);
+        	waterVolumePicker.setDisplayedValues(valueSet);
+        	waterVolumePicker.setValue(50);
+	    }
+        waterVolumePicker
                 .setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
                 {
                     @Override
@@ -247,8 +251,8 @@ public class CoffeeFragment extends Fragment implements
                                 .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     }
                 }
-                else
                 // Stop Button Pressed
+                else
                 {
                     wl.release();
                     timeSwapBuff += timeInMilliseconds;
@@ -270,27 +274,10 @@ public class CoffeeFragment extends Fragment implements
             @Override
             public void onClick(View view)
             {
-                customHandler.removeCallbacks(updateTimerThread);
-                startTime = 0L;
-                timeInMilliseconds = 0L;
-                timeSwapBuff = 0L;
-                updatedTime = 0L;
-                setTimerLabel(timerStartValue);
-                isStarted = false;
-                startButton.setText("Start");
-                timerValue.setTextColor(Color.WHITE);
-                if(isStarted)
-                {
-                    wl.release();
-                }
-                // Release rotation if necessary
-                mainActivity
-                        .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                resetTimer();
             }
         });
-        
-        
-
+       
         ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
         ratingBar.setRating(sharedPref.getFloat(RATE_TAG + type, 0f));
 
@@ -327,7 +314,28 @@ public class CoffeeFragment extends Fragment implements
                                                                              // Dropdown
                 accordionView.getSectionByChildId(R.id.timerLayout)
                         .setVisibility(View.GONE);
-                setChemexValues(0, 8.4f, 0.3f);
+                if("oz".equalsIgnoreCase(massUnit))
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setChemexValues(0, 0.24f);
+                	}
+                	else //oz per ml
+                	{
+                		setChemexValues(0, 0.002f);
+                	}
+                }
+                else //g
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setChemexValues(0, 6.72f); //g per cup
+                	}
+                	else
+                	{
+                		setChemexValues(0, 0.057f); //g per ml
+                	}
+                }
                 break;
             case 2:
                 mainActivity.setTitle("Siphon");
@@ -335,7 +343,28 @@ public class CoffeeFragment extends Fragment implements
                                                                              // Dropdown
                 accordionView.getSectionByChildId(R.id.timerLayout)
                         .setVisibility(View.GONE);
-                setSiphonValues(0, 8.4f, 0.3f);
+                if("oz".equalsIgnoreCase(massUnit))
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setSiphonValues(0, 0.3f);
+                	}
+                	else //oz per ml
+                	{
+                		setSiphonValues(0, 0.0025f);
+                	}
+                }
+                else //g
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setSiphonValues(0, 8.4f); //g per cup
+                	}
+                	else
+                	{
+                		setSiphonValues(0, 0.071f); //g per ml
+                	}
+                }
                 break;
             case 3:
                 mainActivity.setTitle("AeroPress");
@@ -343,28 +372,155 @@ public class CoffeeFragment extends Fragment implements
                                                                              // Dropdown
                 accordionView.getSectionByChildId(R.id.cupLayout)
                         .setVisibility(View.GONE);
-                setAeroPressValues(30000L, 17f, 0.6f);
+                if("oz".equalsIgnoreCase(massUnit))
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setAeroPressValues(30000, 0.6f);//oz per cup
+                	}
+                	else //oz per ml
+                	{
+                		setAeroPressValues(30000, 0.005f);
+                	}
+                }
+                else //g
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setAeroPressValues(30000, 17); //g per cup
+                	}
+                	else
+                	{
+                		setAeroPressValues(30000, 0.144f); //g per ml
+                	}
+                }
+                break;
             default:
                 break;
         }
 
         return rootView;
     }
-
+    
+	@Override
+	public void onPause()
+	{
+		Log.d("CoffeeFragment", "onPause");
+		//Release the wake lock if the fragment is interrupted or closed.
+		if(wl != null)
+		{
+			if(wl.isHeld())
+			{
+				try
+				{
+					resetTimer();
+				}
+				catch(Exception ex)
+				{
+					Log.e("CoffeeNerdException", ex.toString());
+				}
+			}
+		}
+		super.onPause();
+	}
+	
+	private void resetTimer()
+	{
+		customHandler.removeCallbacks(updateTimerThread);
+        startTime = 0L;
+        timeInMilliseconds = 0L;
+        timeSwapBuff = 0L;
+        updatedTime = 0L;
+        setTimerLabel(timerStartValue);
+        isStarted = false;
+        startButton.setText("Start");
+        timerValue.setTextColor(Color.WHITE);
+        if(isStarted)
+        {
+            wl.release();
+        }
+        // Release rotation if necessary
+        mainActivity
+                .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+	}
+	
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId)
     {
         switch (itemPosition)
         {
             case 0:
-                setPressValues(STANDARD_TIMER, STANDARD_WEIGHT_G,
-                        STANDARD_WEIGHT_OZ);
+                if("oz".equalsIgnoreCase(massUnit))
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setPressValues(STANDARD_TIMER, 0.025f);
+                	}
+                	else //oz per ml
+                	{
+                		setPressValues(STANDARD_TIMER, 0.002f);
+                	}
+                }
+                else //g
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setPressValues(STANDARD_TIMER, 7); //g per cup
+                	}
+                	else
+                	{
+                		setPressValues(STANDARD_TIMER, 0.059f); //g per ml
+                	}
+                }
+                
                 break;
             case 1:
-                setPressValues(DARK_TIMER, DARK_WEIGHT_G, DARK_WEIGHT_OZ);
+            	if("oz".equalsIgnoreCase(massUnit))
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setPressValues(DARK_TIMER, 0.375f);
+                	}
+                	else //oz per ml
+                	{
+                		setPressValues(DARK_TIMER, 0.003f);
+                	}
+                }
+                else //g
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setPressValues(DARK_TIMER, 10.5f); //g per cup
+                	}
+                	else
+                	{
+                		setPressValues(DARK_TIMER, 0.089f); //g per ml
+                	}
+                }
                 break;
             case 2:
-                setPressValues(LIGHT_TIMER, LIGHT_WEIGHT_G, LIGHT_WEIGHT_OZ);
+            	if("oz".equalsIgnoreCase(massUnit))
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setPressValues(LIGHT_TIMER, 0.025f);
+                	}
+                	else //oz per ml
+                	{
+                		setPressValues(LIGHT_TIMER, 0.002f);
+                	}
+                }
+                else //g
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setPressValues(LIGHT_TIMER, 7); //g per cup
+                	}
+                	else
+                	{
+                		setPressValues(LIGHT_TIMER, 0.059f); //g per ml
+                	}
+                }
                 break;
             default:
                 // Do nothing
@@ -373,16 +529,13 @@ public class CoffeeFragment extends Fragment implements
         return false;
     }
 
-    private void setAeroPressValues(long aSteepTime, float aWeightGrams,
-            float aWeightOunces)
+    private void setAeroPressValues(long aSteepTime, float aRatio)
     {
-        this.weightGrams = aWeightGrams;
-        this.weightOunces = aWeightOunces;
+    	this.ratio = aRatio;
         setWeightValues();
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Fine Grind - " + this.weightGrams + "g/"
-                + this.weightOunces + "oz per 4oz Cup");
+        groundsView.setText("Fine Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1.Remove the plunger and the cap from the chamber."
                         + "\n\n2. Put a filter in the cap and twist it onto the chamber."
@@ -397,16 +550,13 @@ public class CoffeeFragment extends Fragment implements
 
     }
 
-    private void setChemexValues(long aSteepTime, float aWeightGrams,
-            float aWeightOunces)
+    private void setChemexValues(long aSteepTime, float aRatio)
     {
-        this.weightGrams = aWeightGrams;
-        this.weightOunces = aWeightOunces;
+        this.ratio = aRatio;
         setWeightValues();
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Medium Grind - " + this.weightGrams + "g/"
-                + this.weightOunces + "oz per 5oz Cup");
+        groundsView.setText("Medium Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1. Open the Chemex-Bonded® Coffee Filter into a cone. One side should have three layers. Place the cone in the top of "
                         + "your coffeemaker with the thick portion toward the pouring spout"
@@ -421,16 +571,13 @@ public class CoffeeFragment extends Fragment implements
         // Official Chemex
     }
 
-    private void setPressValues(long aSteepTime, float aWeightGrams,
-            float aWeightOunces)
+    private void setPressValues(long aSteepTime, float aRatio)
     {
-        this.weightGrams = aWeightGrams;
-        this.weightOunces = aWeightOunces;
+        this.ratio = aRatio;
         setWeightValues();
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Course Grind - " + this.weightGrams + "g/"
-                + this.weightOunces + "oz per 4oz Cup");
+        groundsView.setText("Course Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1. Pour hot (not boiling) water into the pot. Leave a minimum of 2,5 cm/1 inch of space at"
                         + " the top. \n\n2. Stir the brew with a plastic spoon. \n\n3.Place the plunger unit on top of the pot. "
@@ -442,24 +589,18 @@ public class CoffeeFragment extends Fragment implements
         // Bodum Instruction
     }
 
-    private void setSiphonValues(long aSteepTime, float aWeightGrams,
-            float aWeightOunces)
+    private void setSiphonValues(long aSteepTime, float aRatio)
     {
-        this.weightGrams = aWeightGrams;
-        this.weightOunces = aWeightOunces;
+    	ratio = aRatio;
         setWeightValues();
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Course Grind - " + this.weightGrams + "g/"
-                + this.weightOunces + "oz per 4oz Cup");
+        groundsView.setText("Course Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1. Measure the amount of water you are going to brew and place it in the lower chamber of the vacuum pot. Begin heating "
                         + "the water until it is almost boiling, or 190 to 195 degrees."
                         + "\n\n2.  While the water heats, measure and grind your coffee. Start with a drip course grind, measuring "
-                        + this.weightGrams
-                        + " grams, or "
-                        + this.weightOunces
-                        + " ounces, of coffee per 4 ounces of water."
+                        + this.ratio+massUnit+" per "+volumeUnit+" of water."
                         + "\n\n3.Once the water is near boiling, place the top half of the vacuum pot back onto the lower section, being careful to allow for a tight seal"
                         + " between the upper and lower chambers. When you do this, you will create a positive pressure in the lower chamber that will force most of the water into the top bowl. "
                         + "When three-fourths of the water is in the top chamber, lower the temperature on your burner to medium-low or low. "
@@ -469,7 +610,6 @@ public class CoffeeFragment extends Fragment implements
                         + "If it comes down too quickly, make the grind finer."
                         + "\n\n 5. Taste the coffee and note how you would adjust the grind, brew time, and temperature for future pots.");
         // http://www.kickapoocoffee.com/Kickapoo-Coffee-Vacuum-Pot-Coffee-Brewing-Instructions-a/144.htm
-
     }
 
     private void setTimerLabel(long countdown)
@@ -484,29 +624,21 @@ public class CoffeeFragment extends Fragment implements
 
     private void setWeightValues()
     {
-        int cups = cupPicker.getValue();
-        setWeightValues(cups);
+        int volumeValue = waterVolumePicker.getValue();
+        setWeightValues(volumeValue);
     }
 
-    private void setWeightValues(int cups)
+    private void setWeightValues(int volume)
     {
-        int unitPosition = unitSpinner.getSelectedItemPosition();
-        switch (unitPosition)
-        {
-            case 0:
-                groundWeightView.setText(Float.toString(weightGrams));
-                float totalGrams = weightGrams * cups;
-                totalGroundsView.setText(Float.toString(totalGrams));
-                totalGroundsUnitsView.setText("g");
-                break;
-            case 1:
-                groundWeightView.setText(Float.toString(weightOunces));
-                float totalOunces = weightOunces * cups;
-                totalGroundsView.setText(Float.toString(totalOunces));
-                totalGroundsUnitsView.setText("oz");
-                break;
-            default:
-                break;
-        }
+	    groundWeightView.setText(Float.toString(ratio));
+	    float totalMass = ratio * (float)volume;
+	    if("g".equalsIgnoreCase(massUnit))
+	    {
+	    	totalMass *= 5f;
+	    }
+	   
+	    totalMass = Math.round(totalMass * 100f)/100f; //Round to 2 decimal places
+	    totalGroundsView.setText(Float.toString(totalMass));
+	    totalGroundsUnitsView.setText(sharedPref.getString(PreferencesFragment.MASS_TAG, ""));
     }
 }

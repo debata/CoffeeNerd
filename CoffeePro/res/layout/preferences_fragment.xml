@@ -5,21 +5,10 @@
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical"
     android:padding="10dp">
-    <TextView android:text="@string/volume_unit"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:textStyle="bold"/>
-	<RadioGroup android:id="@+id/volume_group"
-	    android:orientation="horizontal"
-	    android:layout_width="wrap_content" android:layout_height="wrap_content">
-	    <RadioButton android:id="@+id/millilitres"
-	        android:text="@string/millilitres"
-	        android:checked="true"/>
-	    <RadioButton android:id="@+id/cups"
-	        android:text="@string/cups"/>
-	</RadioGroup>
 	<TextView android:text="@string/mass_unit"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textSize="16sp"/>
 	<RadioGroup android:id="@+id/mass_group"
 	    android:orientation="horizontal"
 	    android:layout_width="wrap_content" android:layout_height="wrap_content">
@@ -29,4 +18,19 @@
 	    <RadioButton android:id="@+id/ounces"
 	        android:text="@string/ounces"/>
 	</RadioGroup>
+    <TextView android:text="@string/volume_unit"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+	<RadioGroup android:id="@+id/volume_group"
+	    android:orientation="horizontal"
+	    android:layout_width="wrap_content" android:layout_height="wrap_content">
+	    <RadioButton android:id="@+id/millilitres"
+	        android:text="@string/millilitres"
+	        android:checked="true"/>
+	    <RadioButton android:id="@+id/cups"
+	        android:text="@string/cups"/>
+	</RadioGroup>
+	<TextView android:text="@string/cup_warning"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 </LinearLayout>

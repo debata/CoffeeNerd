@@ -28,10 +28,12 @@ public class PreferencesFragment extends Fragment
     private RadioGroup volumeGroup;
     private RadioGroup massGroup;
     
+    
+    
     private SharedPreferences sharedPref;
     
-    public final String VOLUME_TAG = "VolumeUnit";
-    public final String MASS_TAG = "MassUnit";
+    public final static String VOLUME_TAG = "VolumeUnit";
+    public final static String MASS_TAG = "MassUnit";
     
     
     @Override
@@ -45,7 +47,7 @@ public class PreferencesFragment extends Fragment
         mainActivity.getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         
         sharedPref = mainActivity.getPreferences(Context.MODE_PRIVATE);
-        
+
         volumeGroup = (RadioGroup) rootView.findViewById(R.id.volume_group);
         volumeGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
         {
@@ -78,17 +80,39 @@ public class PreferencesFragment extends Fragment
 				SharedPreferences.Editor editor = sharedPref.edit();
 				if(checkedId == R.id.ounces)
 				{
-					editor.putString(VOLUME_TAG, "oz");
+					editor.putString(MASS_TAG, "oz");
 					editor.commit();
 				}
 				else
 				{
-					editor.putString(VOLUME_TAG, "g");
+					editor.putString(MASS_TAG, "g");
 					editor.commit();
 				}
 				
 			}
 		});
+        
+        String volumeUnit = sharedPref.getString(PreferencesFragment.VOLUME_TAG, "ml");
+        
+        if("cup".equalsIgnoreCase(volumeUnit))
+        {
+        	volumeGroup.check(R.id.cups);
+        }
+        else
+        {
+        	volumeGroup.check(R.id.millilitres);
+        }
+        
+        String massUnit = sharedPref.getString(PreferencesFragment.MASS_TAG, "g");
+        
+        if("oz".equalsIgnoreCase(massUnit))
+        {
+        	massGroup.check(R.id.ounces);
+        }
+        else
+        {
+        	massGroup.check(R.id.grams);
+        }
         
         return rootView;
         

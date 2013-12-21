@@ -26,7 +26,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +57,6 @@ public class CoffeeFragment extends Fragment implements
     private TextView massLabel;
     private TextView volumeLabel;
     private NumberPicker waterVolumePicker;
-    private Spinner unitSpinner;
     private AccordionView accordionView;
     private RatingBar ratingBar;
     private Button saveButton;
@@ -395,6 +393,64 @@ public class CoffeeFragment extends Fragment implements
                 	}
                 }
                 break;
+            case 4:
+                mainActivity.setTitle("Hario V60");
+                mActionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); // Hide
+                                                                             // Dropdown
+                accordionView.getSectionByChildId(R.id.timerLayout)
+                        .setVisibility(View.GONE);
+                if("oz".equalsIgnoreCase(massUnit))
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setHarioValues(0, 0.35f);
+                	}
+                	else //oz per ml
+                	{
+                		setHarioValues(0, 0.003f);
+                	}
+                }
+                else //g
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setHarioValues(0, 10f); //g per cup
+                	}
+                	else
+                	{
+                		setHarioValues(0, 0.085f); //g per ml
+                	}
+                }
+                break;
+            case 5:
+                mainActivity.setTitle("Automatic Drip");
+                mActionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); // Hide
+                                                                             // Dropdown
+                accordionView.getSectionByChildId(R.id.timerLayout)
+                        .setVisibility(View.GONE);
+                if("oz".equalsIgnoreCase(massUnit))
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setDripValues(0, 0.212f);
+                	}
+                	else //oz per ml
+                	{
+                		setDripValues(0, 0.0018f);
+                	}
+                }
+                else //g
+                {
+                	if("cup".equalsIgnoreCase(volumeUnit))
+                	{
+                		setDripValues(0, 6f); //g per cup
+                	}
+                	else
+                	{
+                		setDripValues(0, 0.051f); //g per ml
+                	}
+                }
+                break;
             default:
                 break;
         }
@@ -402,6 +458,8 @@ public class CoffeeFragment extends Fragment implements
         return rootView;
     }
     
+
+
 	@Override
 	public void onPause()
 	{
@@ -558,11 +616,11 @@ public class CoffeeFragment extends Fragment implements
         setTimerLabel(timerStartValue);
         groundsView.setText("Medium Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
-                .setText("\n1. Open the Chemex-Bonded� Coffee Filter into a cone. One side should have three layers. Place the cone in the top of "
+                .setText("\n1. Open the Chemex-Bonded® Coffee Filter into a cone. One side should have three layers. Place the cone in the top of "
                         + "your coffeemaker with the thick portion toward the pouring spout"
                         + "\n\n2. Using Regular or Automatic Grind coffee only, put one rounded tablespoon of coffee per 5 oz. cup into the filter "
-                        + "cone. If you prefer stronger coffee, use more; there is never any bitterness in coffee brewed using the Chemex� method."
-                        + "\n\n3. When the water is boiling, remove it from the heat until it stops boiling vigorously. It should now be at about 200�F,"
+                        + "cone. If you prefer stronger coffee, use more; there is never any bitterness in coffee brewed using the Chemex® method."
+                        + "\n\n3. When the water is boiling, remove it from the heat until it stops boiling vigorously. It should now be at about 200°F,"
                         + " a perfect brewing temperature. Pour a small amount of water over the coffee grounds, just enough to wet them without "
                         + "floating. This is important because it allows the grounds to \"bloom\" so the desirable coffee elements can be released"
                         + "\n\n4.  After this first wetting simply pour more water, soaking the grounds each time, but keeping the water level well"
@@ -611,6 +669,39 @@ public class CoffeeFragment extends Fragment implements
                         + "\n\n 5. Taste the coffee and note how you would adjust the grind, brew time, and temperature for future pots.");
         // http://www.kickapoocoffee.com/Kickapoo-Coffee-Vacuum-Pot-Coffee-Brewing-Instructions-a/144.htm
     }
+    
+	private void setHarioValues(int aSteepTime, float aRatio)
+	{
+		 this.ratio = aRatio;
+	        setWeightValues();
+	        timerStartValue = aSteepTime;
+	        setTimerLabel(timerStartValue);
+	        groundsView.setText("Medium-Fine Grind - "+aRatio+massUnit+" per "+volumeUnit);
+	        instructionView
+	                .setText("\n1. Fold the paper ﬁlter along the seams and place inside the cone. Add coﬀee grounds (medium-ﬁne grind) for your " +
+	                		"required servings and shake it lightly to level. 10-12g is normally good for one serving (120ml). The attached measuring spoon = 12g / 1 spoon. " +
+	                		"Using freshly ground coffee is recommended. (Adjust proportions for a stronger or weaker brew)\n" +
+	                		"\n2. Take the boiling water oﬀ the ﬂame. Wait for the boiling water to settle. Pour hot water slowly to moisten the grounds from the center" +
+	                		" to the outward with moving circular pattern. Wait for about 30 seconds until next pouring.\n" +
+	                		"\n3. Slowly start adding more water using the same speed, swirling motion as before. Make sure the water does not come in direct contact with " +
+	                		"the paper ﬁlter. Brewing should take 3 minutes");
+	        // Official Hario http://www.hario.jp/pdf/VDG-03B_Instruction_Manual1106.pdf
+		
+	}
+	
+	private void setDripValues(int aSteepTime, float aRatio)
+	{
+		this.ratio = aRatio;
+        setWeightValues();
+        timerStartValue = aSteepTime;
+        setTimerLabel(timerStartValue);
+        groundsView.setText("Medium Grind - "+aRatio+massUnit+" per "+volumeUnit);
+        instructionView
+                .setText("\n1. Place the paper filter into the filter basket. Optional: Preheat the decanter with hot water.\n" +
+                		"\n2. Grind the beans to a medium grind. Use approxately "+massUnit+" per "+volumeUnit+".\n"+
+                		"\n3. Add the required amount of water to the coffee machine.\n" +
+                		"\n4. Turn on the machine and wait a few minutes. Turn off the machine in necessary.");		
+	}
 
     private void setTimerLabel(long countdown)
     {
@@ -632,7 +723,7 @@ public class CoffeeFragment extends Fragment implements
     {
 	    groundWeightView.setText(Float.toString(ratio));
 	    float totalMass = ratio * (float)volume;
-	    if("g".equalsIgnoreCase(massUnit))
+	    if("ml".equalsIgnoreCase(volumeUnit))
 	    {
 	    	totalMass *= 5f;
 	    }

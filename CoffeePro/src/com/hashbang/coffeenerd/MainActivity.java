@@ -73,7 +73,7 @@ public class MainActivity extends SherlockFragmentActivity
         // Generate icon
         icon = new int[]
         { R.drawable.french, R.drawable.chemex, R.drawable.siphon,
-                R.drawable.aero,R.drawable.ic_sysbar, R.drawable.ic_menu_info_details };
+                R.drawable.aero,R.drawable.hario, R.drawable.drip, R.drawable.ic_sysbar, R.drawable.ic_menu_info_details };
 
         // Locate DrawerLayout in drawer_main.xml
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -172,13 +172,13 @@ public class MainActivity extends SherlockFragmentActivity
         mDrawerList.setItemChecked(position, true);
         FragmentManager fragmentManager = getFragmentManager();
         setTitle(mCoffeeTypes[position]);
-        if(position < 4)
+        if(position < 6)
         {
             CoffeeFragment cf = CoffeeFragment.newInstance(position);
             fragmentManager.beginTransaction().replace(R.id.content_frame, cf)
                     .commit();
         }
-        else if(position == 4) //Preferences Fragment
+        else if(position == 6) //Preferences Fragment
         {
         	PreferencesFragment pf = PreferencesFragment.newInstance();
         	 fragmentManager.beginTransaction().replace(R.id.content_frame, pf)

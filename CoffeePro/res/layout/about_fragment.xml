@@ -31,6 +31,8 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:text="@string/stump_link"/>
-   
-
+    <TextView android:id="@+id/hario_link"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/hario_link"/>
 </LinearLayout>

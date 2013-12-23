@@ -17,7 +17,8 @@
             accordion:section_headers="@array/fp_headers"
             accordion:section_visibility="@array/accordion_visibility"
             android:orientation="vertical" >
-            <LinearLayout android:orientation="vertical"
+            <LinearLayout android:id="@+id/instructions_layout"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">			    
 			    <TextView
@@ -25,7 +26,7 @@
 				    android:layout_width="match_parent"
 				    android:layout_height="wrap_content" 
 				    android:textStyle="italic"
-				    android:textSize="14sp"/>	    
+				    android:textSize="14sp"/>	   
 			    <TextView
 			        android:id="@+id/instructionsTextView"
 			        android:layout_width="match_parent"
@@ -60,12 +61,11 @@
 			    	    android:textStyle="bold"/>
 	            </LinearLayout>          
 
-				<LinearLayout 
+				<LinearLayout android:id="@+id/notes_layout"
 				    android:layout_width="fill_parent"
 				    android:layout_height="wrap_content"
 				    android:gravity="center_horizontal|center_vertical"
 				    android:orientation="horizontal" >
-
 				    <LinearLayout 
 				        android:orientation="horizontal"
 		                android:layout_width="0dp"

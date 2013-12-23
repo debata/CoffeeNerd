@@ -161,6 +161,7 @@ public class CoffeeFragment extends Fragment implements
                 .getSystemService(Context.POWER_SERVICE);
         wl = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "Partial WakeLock");
+        wl.setReferenceCounted(false);
 
         sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         
@@ -241,7 +242,11 @@ public class CoffeeFragment extends Fragment implements
             {
                 if(!isStarted)
                 {
-                    wl.acquire();
+                	if ((wl != null) &&           // we have a WakeLock
+                		    (wl.isHeld() == false))
+                	{  // but we don't hold it 
+                		wl.acquire();
+                	}
                     startTime = SystemClock.uptimeMillis();
                     customHandler.postDelayed(updateTimerThread, 0);
                     ((Button) view).setText("Stop");
@@ -470,9 +475,9 @@ public class CoffeeFragment extends Fragment implements
 
 
 	@Override
-	public void onPause()
+	public void onDestroy()
 	{
-		Log.d("CoffeeFragment", "onPause");
+		Log.d("CoffeeFragment", "OnDestroy");
 		
 		//Release the wake lock if the fragment is interrupted or closed.
 		if(wl != null)
@@ -489,7 +494,7 @@ public class CoffeeFragment extends Fragment implements
 				}
 			}
 		}
-		super.onPause();
+		super.onDestroy();
 	}
 	
 	private void resetTimer()

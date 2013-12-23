@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -60,7 +61,7 @@ public class CoffeeFragment extends Fragment implements
     private AccordionView accordionView;
     private RatingBar ratingBar;
     private Button saveButton;
-
+   
     private EditText commentView;
     private TextView timerValue;
     private Handler customHandler = new Handler();
@@ -127,6 +128,12 @@ public class CoffeeFragment extends Fragment implements
     public CoffeeFragment()
     {
     }
+    
+    @Override
+    public void onResume()
+    {		
+    	super.onResume();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -147,6 +154,8 @@ public class CoffeeFragment extends Fragment implements
         View rootView = inflater.inflate(R.layout.coffee_fragment, container,
                 false);
         mainActivity = getActivity();
+        
+
 
         PowerManager manager = (PowerManager) mainActivity
                 .getSystemService(Context.POWER_SERVICE);
@@ -464,6 +473,7 @@ public class CoffeeFragment extends Fragment implements
 	public void onPause()
 	{
 		Log.d("CoffeeFragment", "onPause");
+		
 		//Release the wake lock if the fragment is interrupted or closed.
 		if(wl != null)
 		{
@@ -593,9 +603,9 @@ public class CoffeeFragment extends Fragment implements
         setWeightValues();
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Fine Grind - "+aRatio+massUnit+" per "+volumeUnit);
+        groundsView.setText("Fine Grind - 2 Aeropress Scoops (~34g)");
         instructionView
-                .setText("\n1.Remove the plunger and the cap from the chamber."
+                .setText("\n1. Remove the plunger and the cap from the chamber."
                         + "\n\n2. Put a filter in the cap and twist it onto the chamber."
                         + "\n\n3. Stand the chamber on a sturdy mug."
                         + "\n\n4. Put two AeroPress scoops of fine-drip grind coffee into the chamber."
@@ -603,7 +613,9 @@ public class CoffeeFragment extends Fragment implements
                         + "\n\n6. Mix the water and coffee with the stirrer for about 10 seconds."
                         + "\n\n7. Wet the rubber seal and insert the plunger into the chamber. Gently press down about a quarter of an inch and "
                         + "maintain that pressure for about 20 to 30 seconds until the plunger bottoms on the coffee. Gentle pressure is the key to "
-                        + "easy AeroPressing.");
+                        + "easy AeroPressing."
+                        +"\n\n8. You've just made a double espresso. For American coffee,  top-off the mug with hot water. For a latte, top-off "
+                        +"the mug with hot milk.");
         // Official AeroPress Instructions
 
     }
@@ -659,7 +671,7 @@ public class CoffeeFragment extends Fragment implements
                         + "the water until it is almost boiling, or 190 to 195 degrees."
                         + "\n\n2.  While the water heats, measure and grind your coffee. Start with a drip course grind, measuring "
                         + this.ratio+massUnit+" per "+volumeUnit+" of water."
-                        + "\n\n3.Once the water is near boiling, place the top half of the vacuum pot back onto the lower section, being careful to allow for a tight seal"
+                        + "\n\n3. Once the water is near boiling, place the top half of the vacuum pot back onto the lower section, being careful to allow for a tight seal"
                         + " between the upper and lower chambers. When you do this, you will create a positive pressure in the lower chamber that will force most of the water into the top bowl. "
                         + "When three-fourths of the water is in the top chamber, lower the temperature on your burner to medium-low or low. "
                         + "\n\n4. Once nearly all the water is in the upper chamber, add the coffee to the water and stir it well, wetting all the grounds to ensure a uniform extraction. "
@@ -678,10 +690,10 @@ public class CoffeeFragment extends Fragment implements
 	        setTimerLabel(timerStartValue);
 	        groundsView.setText("Medium-Fine Grind - "+aRatio+massUnit+" per "+volumeUnit);
 	        instructionView
-	                .setText("\n1. Fold the paper ﬁlter along the seams and place inside the cone. Add coﬀee grounds (medium-ﬁne grind) for your " +
+	                .setText("\n1. Fold the paper ﬁlter along the seams and place inside the cone. Add coffee grounds (medium-ﬁne grind) for your " +
 	                		"required servings and shake it lightly to level. 10-12g is normally good for one serving (120ml). The attached measuring spoon = 12g / 1 spoon. " +
 	                		"Using freshly ground coffee is recommended. (Adjust proportions for a stronger or weaker brew)\n" +
-	                		"\n2. Take the boiling water oﬀ the ﬂame. Wait for the boiling water to settle. Pour hot water slowly to moisten the grounds from the center" +
+	                		"\n2. Take the boiling water off the ﬂame. Wait for the boiling water to settle. Pour hot water slowly to moisten the grounds from the center" +
 	                		" to the outward with moving circular pattern. Wait for about 30 seconds until next pouring.\n" +
 	                		"\n3. Slowly start adding more water using the same speed, swirling motion as before. Make sure the water does not come in direct contact with " +
 	                		"the paper ﬁlter. Brewing should take 3 minutes");
@@ -698,9 +710,9 @@ public class CoffeeFragment extends Fragment implements
         groundsView.setText("Medium Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1. Place the paper filter into the filter basket. Optional: Preheat the decanter with hot water.\n" +
-                		"\n2. Grind the beans to a medium grind. Use approxately "+massUnit+" per "+volumeUnit+".\n"+
+                		"\n2. Grind the beans to a medium grind. Use approxately "+aRatio+massUnit+" per "+volumeUnit+".\n"+
                 		"\n3. Add the required amount of water to the coffee machine.\n" +
-                		"\n4. Turn on the machine and wait a few minutes. Turn off the machine in necessary.");		
+                		"\n4. Turn on the machine and wait a few minutes. Turn off the machine if necessary.");		
 	}
 
     private void setTimerLabel(long countdown)

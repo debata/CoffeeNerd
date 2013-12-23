@@ -28,6 +28,7 @@ public class AboutFragment extends Fragment
     private TextView chemexLabel;
     private TextView stumpLabel;
     private TextView bodumRefLabel;
+    private TextView harioLabel;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +46,8 @@ public class AboutFragment extends Fragment
         chemexLabel.setMovementMethod(LinkMovementMethod.getInstance());
         stumpLabel = (TextView) rootView.findViewById(R.id.stump_link);
         stumpLabel.setMovementMethod(LinkMovementMethod.getInstance());
+        harioLabel = (TextView) rootView.findViewById(R.id.hario_link);
+        harioLabel.setMovementMethod(LinkMovementMethod.getInstance());
         
         return rootView;
         

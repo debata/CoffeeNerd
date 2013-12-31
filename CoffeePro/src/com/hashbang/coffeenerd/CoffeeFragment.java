@@ -112,6 +112,7 @@ public class CoffeeFragment extends Fragment implements
                 }
                 catch (Exception e)
                 {
+                	Log.e("NotificationSound", e.toString());
                 }
                 wl.release();
                 isStarted = false;
@@ -512,9 +513,6 @@ public class CoffeeFragment extends Fragment implements
         {
             wl.release();
         }
-        // Release rotation if necessary
-        mainActivity
-                .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
 	
     @Override

@@ -3,12 +3,16 @@ package com.hashbang.coffeenerd;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.hashbang.coffeepro.R;
 
@@ -24,12 +28,9 @@ public class AboutFragment extends Fragment
     public AboutFragment(){}
     
     private Activity mainActivity;
-    
-    private TextView chemexLabel;
-    private TextView stumpLabel;
-    private TextView bodumRefLabel;
-    private TextView harioLabel;
-    
+    private Button emailButton;
+    private Button rateButton;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState)
@@ -40,15 +41,36 @@ public class AboutFragment extends Fragment
         mainActivity = getActivity();
         mainActivity.getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         
-        bodumRefLabel = (TextView) rootView.findViewById(R.id.bodum_link);
-        bodumRefLabel.setMovementMethod(LinkMovementMethod.getInstance());
-        chemexLabel = (TextView) rootView.findViewById(R.id.chemex_link);
-        chemexLabel.setMovementMethod(LinkMovementMethod.getInstance());
-        stumpLabel = (TextView) rootView.findViewById(R.id.stump_link);
-        stumpLabel.setMovementMethod(LinkMovementMethod.getInstance());
-        harioLabel = (TextView) rootView.findViewById(R.id.hario_link);
-        harioLabel.setMovementMethod(LinkMovementMethod.getInstance());
-        
+        emailButton = (Button) rootView.findViewById(R.id.email_button);
+        emailButton.setOnClickListener(new OnClickListener()
+        {
+			@Override
+			public void onClick(View v)
+			{
+				Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto",mainActivity.getResources().getString(R.string.email), null));
+				emailIntent.putExtra(Intent.EXTRA_SUBJECT, "CoffeeNerd");
+				startActivity(Intent.createChooser(emailIntent, "Send email..."));	
+			}
+		});
+       
+        rateButton = (Button) rootView.findViewById(R.id.rate_button);
+        rateButton.setOnClickListener(new OnClickListener()
+        {
+			@Override
+			public void onClick(View v)
+			{
+				Uri uri = Uri.parse("market://details?id=" + mainActivity.getPackageName());
+			    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+			    try
+			    {
+			    	mainActivity.startActivity(goToMarket);
+			    }
+			    catch (ActivityNotFoundException e)
+			    {
+			        Log.e("MarketError", e.toString());
+			    }
+			}
+		});
         return rootView;
         
     }

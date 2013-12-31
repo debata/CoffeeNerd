@@ -73,7 +73,7 @@ public class MainActivity extends SherlockFragmentActivity
         // Generate icon
         icon = new int[]
         { R.drawable.french, R.drawable.chemex, R.drawable.siphon,
-                R.drawable.aero,R.drawable.hario, R.drawable.drip, R.drawable.ic_sysbar, R.drawable.ic_menu_info_details };
+                R.drawable.aero,R.drawable.hario, R.drawable.drip, R.drawable.ic_sysbar, R.drawable.references, R.drawable.ic_menu_info_details };
 
         // Locate DrawerLayout in drawer_main.xml
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -127,14 +127,14 @@ public class MainActivity extends SherlockFragmentActivity
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, CoffeeFragment.newInstance(0))
-                .commit();
+//        FragmentManager fragmentManager = getFragmentManager();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.content_frame, CoffeeFragment.newInstance(0))
+//                .commit();
 
         if(savedInstanceState == null)
         {
-            selectItem(0);
+            selectItem(8); //About Fragment
         }
     }
 
@@ -182,6 +182,12 @@ public class MainActivity extends SherlockFragmentActivity
         {
         	PreferencesFragment pf = PreferencesFragment.newInstance();
         	 fragmentManager.beginTransaction().replace(R.id.content_frame, pf)
+             .commit();
+        }
+        else if(position == 7) //References Fragment
+        {
+        	ReferencesFragment rf = ReferencesFragment.newInstance();
+        	 fragmentManager.beginTransaction().replace(R.id.content_frame, rf)
              .commit();
         }
         else //Show About Fragment

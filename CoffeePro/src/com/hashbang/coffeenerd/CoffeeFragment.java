@@ -597,6 +597,7 @@ public class CoffeeFragment extends Fragment implements
                 // Do nothing
                 break;
         }
+        resetTimer();
         return false;
     }
 

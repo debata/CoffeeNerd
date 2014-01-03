@@ -2,9 +2,11 @@ package com.hashbang.coffeenerd;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ public class AboutFragment extends Fragment
     private Activity mainActivity;
     private Button emailButton;
     private Button rateButton;
+    private Button donateButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +43,8 @@ public class AboutFragment extends Fragment
                 false);
         mainActivity = getActivity();
         mainActivity.getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        
+        final Resources res = mainActivity.getResources();
         
         emailButton = (Button) rootView.findViewById(R.id.email_button);
         emailButton.setOnClickListener(new OnClickListener()
@@ -69,6 +74,18 @@ public class AboutFragment extends Fragment
 			    {
 			        Log.e("MarketError", e.toString());
 			    }
+			}
+		});
+        
+        donateButton = (Button) rootView.findViewById(R.id.donate_button);
+        donateButton.setOnClickListener(new OnClickListener()
+        {
+			@Override
+			public void onClick(View v)
+			{
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=hashbangsoftware%40gmail%2ecom&lc=US&item_name=HashbangSoftware&currency_code=CAD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"));
+				startActivity(i);
 			}
 		});
         return rootView;

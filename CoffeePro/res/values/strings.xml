@@ -58,4 +58,5 @@
     <string name="cup_warning">Note: 1 Cup = 4 fl. oz</string>
     <string name="send_email">E-mail Me!</string>
     <string name="rate">Rate Me!</string>
+    <string name="donate">Donate!</string>
 </resources>

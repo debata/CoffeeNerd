@@ -53,6 +53,8 @@ public class CustomTimerFragment extends Fragment
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
     
+    private final static int THEME_COLOR = Color.BLACK;
+    
     private Runnable updateTimerThread = new Runnable()
     {
         @Override
@@ -84,7 +86,7 @@ public class CustomTimerFragment extends Fragment
             }
             else
             {
-                timerValue.setTextColor(Color.WHITE);
+                timerValue.setTextColor(THEME_COLOR);
                 customHandler.postDelayed(this, 0);
                 setTimerLabel(countdown);
             }
@@ -252,7 +254,7 @@ public class CustomTimerFragment extends Fragment
         setTimerLabel(timerStartValue);
         isStarted = false;
         startButton.setText("Start");
-        timerValue.setTextColor(Color.WHITE);
+        timerValue.setTextColor(THEME_COLOR);
         if(isStarted)
         {
             wl.release();

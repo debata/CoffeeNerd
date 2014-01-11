@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -77,6 +76,7 @@ public class CoffeeFragment extends Fragment implements
     final private static long STANDARD_TIMER = 240000L;
     final private static long DARK_TIMER = 360000L;
     final private static long LIGHT_TIMER = 120000L;
+    final private static int THEME_COLOR = Color.BLACK;
 
     protected static final String COMMENT_TAG = "Comment";
     protected static final String RATE_TAG = "Rate";
@@ -119,7 +119,7 @@ public class CoffeeFragment extends Fragment implements
             }
             else
             {
-                timerValue.setTextColor(Color.WHITE);
+                timerValue.setTextColor(THEME_COLOR);
                 customHandler.postDelayed(this, 0);
                 setTimerLabel(countdown);
             }
@@ -180,7 +180,7 @@ public class CoffeeFragment extends Fragment implements
         // Populate Drop down
         Resources res = mainActivity.getResources();
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(
-                mainActivity, android.R.layout.simple_dropdown_item_1line,
+                mainActivity, R.layout.action_spinner,
                 res.getStringArray(R.array.fp_types));
         mActionbar.setListNavigationCallbacks(typeAdapter, this);
 
@@ -508,7 +508,7 @@ public class CoffeeFragment extends Fragment implements
         setTimerLabel(timerStartValue);
         isStarted = false;
         startButton.setText("Start");
-        timerValue.setTextColor(Color.WHITE);
+        timerValue.setTextColor(THEME_COLOR);
         if(isStarted)
         {
             wl.release();

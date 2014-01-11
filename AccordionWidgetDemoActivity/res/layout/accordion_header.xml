@@ -12,7 +12,8 @@
         android:layout_marginLeft="10sp"
         android:layout_marginRight="10sp"
         android:gravity="center_horizontal"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        android:background="@drawable/header_bg">
 
         <com.sentaca.android.accordion.widget.ToggleImageLabeledButton
             android:id="@+id/foldButton"

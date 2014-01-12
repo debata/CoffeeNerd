@@ -59,4 +59,7 @@
     <string name="send_email">E-mail Me!</string>
     <string name="rate">Rate Me!</string>
     <string name="donate">Support!</string>
+    <string name="theme_picker">Colour Preference</string>
+    <string name="dark">Dark Theme</string>
+    <string name="light">Light Theme</string>
 </resources>

@@ -76,7 +76,7 @@ public class CoffeeFragment extends Fragment implements
     final private static long STANDARD_TIMER = 240000L;
     final private static long DARK_TIMER = 360000L;
     final private static long LIGHT_TIMER = 120000L;
-    final private static int THEME_COLOR = Color.BLACK;
+    private static int themeColour = Color.WHITE;
 
     protected static final String COMMENT_TAG = "Comment";
     protected static final String RATE_TAG = "Rate";
@@ -119,7 +119,7 @@ public class CoffeeFragment extends Fragment implements
             }
             else
             {
-                timerValue.setTextColor(THEME_COLOR);
+                timerValue.setTextColor(themeColour);
                 customHandler.postDelayed(this, 0);
                 setTimerLabel(countdown);
             }
@@ -508,7 +508,7 @@ public class CoffeeFragment extends Fragment implements
         setTimerLabel(timerStartValue);
         isStarted = false;
         startButton.setText("Start");
-        timerValue.setTextColor(THEME_COLOR);
+        timerValue.setTextColor(themeColour);
         if(isStarted)
         {
             wl.release();
@@ -747,5 +747,10 @@ public class CoffeeFragment extends Fragment implements
 	    totalMass = Math.round(totalMass * 100f)/100f; //Round to 2 decimal places
 	    totalGroundsView.setText(Float.toString(totalMass));
 	    totalGroundsUnitsView.setText(sharedPref.getString(PreferencesFragment.MASS_TAG, ""));
+    }
+    
+    public void setThemeColour(int aColour)
+    {
+    	themeColour = aColour;
     }
 }

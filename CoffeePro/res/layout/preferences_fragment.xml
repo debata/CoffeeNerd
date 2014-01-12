@@ -5,6 +5,19 @@
     android:gravity="center_vertical|center_horizontal"
     android:orientation="vertical"
     android:padding="10dp">
+    <TextView android:text="@string/theme_picker"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+	<RadioGroup android:id="@+id/colour_group"
+	    android:orientation="horizontal"
+	    android:layout_width="wrap_content" android:layout_height="wrap_content">
+	    <RadioButton android:id="@+id/dark_theme"
+	        android:text="@string/dark"
+	        android:checked="true"/>
+	    <RadioButton android:id="@+id/light_theme"
+	        android:text="@string/light"/>
+	</RadioGroup>
 	<TextView android:text="@string/mass_unit"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:textStyle="bold"

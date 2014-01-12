@@ -12,7 +12,7 @@
         android:id="@+id/space2"
         android:layout_width="wrap_content"
         android:layout_height="40sp" />    
-    <TextView android:text="@string/greeting" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    <TextView android:text="@string/greeting" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_horizontal"/>
     <TextView android:text="@string/email" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 	<TextView
         android:id="@+id/space3"

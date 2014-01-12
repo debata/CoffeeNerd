@@ -1,7 +1,10 @@
 package com.hashbang.coffeenerd;
 
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +39,7 @@ public class MainActivity extends SherlockFragmentActivity
     MenuListAdapter mMenuAdapter;
     String[] title;
     String[] subtitle;
+    String themeVal = "dark";
 
     int[] icon;
     private CharSequence mDrawerTitle;
@@ -61,7 +65,18 @@ public class MainActivity extends SherlockFragmentActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        
+        themeVal = sharedPref.getString(PreferencesFragment.THEME_TAG, "dark");
         // Get the view from drawer_main.xml
+        if("light".equalsIgnoreCase(themeVal))
+        {
+        	setTheme(R.style.AppTheme);
+        }
+        else
+        {
+        	setTheme(R.style.DarkTheme);
+        }
         setContentView(R.layout.main_activity);
 
         // Get the Title
@@ -174,13 +189,21 @@ public class MainActivity extends SherlockFragmentActivity
         setTitle(mCoffeeTypes[position]);
         if(position < 6)
         {
-            CoffeeFragment cf = CoffeeFragment.newInstance(position);
+        	CoffeeFragment cf = CoffeeFragment.newInstance(position);
+            if("light".equalsIgnoreCase(themeVal))
+            {
+            	cf.setThemeColour(Color.BLACK);
+            }
             fragmentManager.beginTransaction().replace(R.id.content_frame, cf)
                     .commit();
         }
         else if(position == 6)
         {
         	CustomTimerFragment ctf = CustomTimerFragment.newInstance();
+        	if("light".equalsIgnoreCase(themeVal))
+            {
+        		ctf.setThemeColour(Color.BLACK);
+            }
         	 fragmentManager.beginTransaction().replace(R.id.content_frame, ctf)
              .commit();
         }

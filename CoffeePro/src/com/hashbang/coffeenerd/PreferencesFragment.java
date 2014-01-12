@@ -2,8 +2,10 @@ package com.hashbang.coffeenerd;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,13 +29,13 @@ public class PreferencesFragment extends Fragment
     private Activity mainActivity;
     private RadioGroup volumeGroup;
     private RadioGroup massGroup;
-    
-    
+    private RadioGroup colourGroup;
     
     private SharedPreferences sharedPref;
     
     public final static String VOLUME_TAG = "VolumeUnit";
     public final static String MASS_TAG = "MassUnit";
+    public final static String THEME_TAG = "Theme";
     
     
     @Override
@@ -113,6 +115,60 @@ public class PreferencesFragment extends Fragment
         {
         	massGroup.check(R.id.grams);
         }
+
+        
+        colourGroup = (RadioGroup) rootView.findViewById(R.id.colour_group);
+        String themeVal = sharedPref.getString(PreferencesFragment.THEME_TAG, "dark");
+        
+        if("light".equalsIgnoreCase(themeVal))
+        {
+        	colourGroup.check(R.id.light_theme);
+        }
+        else
+        {
+        	colourGroup.check(R.id.dark_theme);
+        }
+        
+        colourGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+        {
+			
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId)
+			{
+				
+				AlertDialog alert = new AlertDialog.Builder(mainActivity)
+			    .setTitle("Theme Change")
+			    .setMessage("Your theme will be changed once the application has been closed. " +
+			    		"Would you like to close it now?")
+			    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            mainActivity.finish();
+			        }
+			     })
+			    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            // do nothing
+			        }
+			     })
+			    .setIcon(R.drawable.ic_menu_info_details)
+			     .show();
+				
+				SharedPreferences.Editor editor = sharedPref.edit();
+				if(checkedId == R.id.light_theme)
+				{
+					editor.putString(THEME_TAG, "light");
+					editor.commit();
+				}
+				else
+				{
+					editor.putString(THEME_TAG, "dark");
+					editor.commit();
+				}
+				
+			}
+		});
+        
+
         
         return rootView;
         

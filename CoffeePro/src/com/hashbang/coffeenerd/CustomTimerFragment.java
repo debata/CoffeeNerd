@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -42,7 +41,6 @@ public class CustomTimerFragment extends Fragment
     private SeekBar timerMinuteSeekBar;
     private SeekBar timerSecondSeekBar;
     
-    private SharedPreferences sharedPref;
     static boolean isStarted = false;
     private TextView timerValue;
     private Handler customHandler = new Handler();
@@ -53,7 +51,7 @@ public class CustomTimerFragment extends Fragment
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
     
-    private final static int THEME_COLOR = Color.BLACK;
+    private static int themeColour = Color.WHITE;
     
     private Runnable updateTimerThread = new Runnable()
     {
@@ -86,7 +84,7 @@ public class CustomTimerFragment extends Fragment
             }
             else
             {
-                timerValue.setTextColor(THEME_COLOR);
+                timerValue.setTextColor(themeColour);
                 customHandler.postDelayed(this, 0);
                 setTimerLabel(countdown);
             }
@@ -109,7 +107,6 @@ public class CustomTimerFragment extends Fragment
                 "Partial WakeLock");
         wl.setReferenceCounted(false);
         
-        sharedPref = mainActivity.getPreferences(Context.MODE_PRIVATE);
         
         timerMinuteSeekBar = (SeekBar) rootView.findViewById(R.id.timerMinuteSeekBar);
         timerMinuteSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -254,7 +251,7 @@ public class CustomTimerFragment extends Fragment
         setTimerLabel(timerStartValue);
         isStarted = false;
         startButton.setText("Start");
-        timerValue.setTextColor(THEME_COLOR);
+        timerValue.setTextColor(themeColour);
         if(isStarted)
         {
             wl.release();
@@ -269,5 +266,10 @@ public class CustomTimerFragment extends Fragment
         int milliseconds = (int) (countdown % 100);
         timerValue.setText("" + mins + ":" + String.format("%02d", secs) + ":"
                 + String.format("%02d", milliseconds));
+    }
+    
+    public void setThemeColour(int aColour)
+    {
+    	themeColour = aColour;
     }
 }

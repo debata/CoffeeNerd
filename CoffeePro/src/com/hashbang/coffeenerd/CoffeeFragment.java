@@ -180,7 +180,7 @@ public class CoffeeFragment extends Fragment implements
         // Populate Drop down
         Resources res = mainActivity.getResources();
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(
-                mainActivity, R.layout.action_spinner,
+                mainActivity, android.R.layout.simple_dropdown_item_1line,
                 res.getStringArray(R.array.fp_types));
         mActionbar.setListNavigationCallbacks(typeAdapter, this);
 

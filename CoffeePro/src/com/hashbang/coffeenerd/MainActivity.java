@@ -71,7 +71,7 @@ public class MainActivity extends SherlockFragmentActivity
         // Get the view from drawer_main.xml
         if("light".equalsIgnoreCase(themeVal))
         {
-        	setTheme(R.style.AppTheme);
+        	setTheme(R.style.LightTheme);
         }
         else
         {
@@ -95,6 +95,10 @@ public class MainActivity extends SherlockFragmentActivity
 
         // Locate ListView in drawer_main.xml
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+                if("light".equalsIgnoreCase(themeVal))
+        {
+        	mDrawerList.setBackgroundColor(Color.GRAY);
+        }
 
         // Set a custom shadow that overlays the main content when the drawer
         // opens
@@ -141,11 +145,6 @@ public class MainActivity extends SherlockFragmentActivity
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-//        FragmentManager fragmentManager = getFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.content_frame, CoffeeFragment.newInstance(0))
-//                .commit();
 
         if(savedInstanceState == null)
         {

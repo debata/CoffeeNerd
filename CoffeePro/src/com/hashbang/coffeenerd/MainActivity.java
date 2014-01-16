@@ -193,6 +193,10 @@ public class MainActivity extends SherlockFragmentActivity
             {
             	cf.setThemeColour(Color.BLACK);
             }
+            else
+            {
+            	cf.setThemeColour(Color.WHITE);
+            }
             fragmentManager.beginTransaction().replace(R.id.content_frame, cf)
                     .commit();
         }
@@ -202,6 +206,10 @@ public class MainActivity extends SherlockFragmentActivity
         	if("light".equalsIgnoreCase(themeVal))
             {
         		ctf.setThemeColour(Color.BLACK);
+            }
+            else
+            {
+            	ctf.setThemeColour(Color.WHITE);
             }
         	 fragmentManager.beginTransaction().replace(R.id.content_frame, ctf)
              .commit();

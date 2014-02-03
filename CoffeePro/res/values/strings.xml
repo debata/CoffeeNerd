@@ -62,4 +62,7 @@
     <string name="theme_picker">Colour Preference</string>
     <string name="dark">Dark Theme</string>
     <string name="light">Light Theme</string>
+    <string name="support_greeting">Thank you for supporting\nCoffeeNerd!</string>
+    <string name="btc_button">Bitcoin</string>
+    <string name="paypal_button">Paypal</string>
 </resources>

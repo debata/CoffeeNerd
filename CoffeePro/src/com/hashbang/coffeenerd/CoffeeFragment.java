@@ -179,10 +179,23 @@ public class CoffeeFragment extends Fragment implements
         mActionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         // Populate Drop down
         Resources res = mainActivity.getResources();
-        ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(
-                mainActivity, android.R.layout.simple_dropdown_item_1line,
-                res.getStringArray(R.array.fp_types));
-        mActionbar.setListNavigationCallbacks(typeAdapter, this);
+        
+	    ArrayAdapter<String> lTypeAdapter = null;
+	    
+	    
+	    if(type == 3)
+	    {
+	    	lTypeAdapter = new ArrayAdapter<String>(
+	                mainActivity, android.R.layout.simple_dropdown_item_1line,
+	                res.getStringArray(R.array.aero_types));
+	    }
+	    else //Default to French Press
+	    {
+		    lTypeAdapter = new ArrayAdapter<String>(
+		                mainActivity, android.R.layout.simple_dropdown_item_1line,
+		                res.getStringArray(R.array.fp_types));
+	    }
+        mActionbar.setListNavigationCallbacks(lTypeAdapter, this);
 
         instructionView = (TextView) rootView
                 .findViewById(R.id.instructionsTextView);
@@ -381,32 +394,6 @@ public class CoffeeFragment extends Fragment implements
                 break;
             case 3:
                 mainActivity.setTitle("AeroPress");
-                mActionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD); // Hide
-                                                                             // Dropdown
-                accordionView.getSectionByChildId(R.id.cupLayout)
-                        .setVisibility(View.GONE);
-                if("oz".equalsIgnoreCase(massUnit))
-                {
-                	if("cup".equalsIgnoreCase(volumeUnit))
-                	{
-                		setAeroPressValues(30000, 0.6f);//oz per cup
-                	}
-                	else //oz per ml
-                	{
-                		setAeroPressValues(30000, 0.005f);
-                	}
-                }
-                else //g
-                {
-                	if("cup".equalsIgnoreCase(volumeUnit))
-                	{
-                		setAeroPressValues(30000, 17); //g per cup
-                	}
-                	else
-                	{
-                		setAeroPressValues(30000, 0.144f); //g per ml
-                	}
-                }
                 break;
             case 4:
                 mainActivity.setTitle("Hario V60");
@@ -518,109 +505,167 @@ public class CoffeeFragment extends Fragment implements
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId)
     {
-        switch (itemPosition)
-        {
-            case 0:
-                if("oz".equalsIgnoreCase(massUnit))
-                {
-                	if("cup".equalsIgnoreCase(volumeUnit))
-                	{
-                		setPressValues(STANDARD_TIMER, 0.025f);
-                	}
-                	else //oz per ml
-                	{
-                		setPressValues(STANDARD_TIMER, 0.002f);
-                	}
-                }
-                else //g
-                {
-                	if("cup".equalsIgnoreCase(volumeUnit))
-                	{
-                		setPressValues(STANDARD_TIMER, 7); //g per cup
-                	}
-                	else
-                	{
-                		setPressValues(STANDARD_TIMER, 0.059f); //g per ml
-                	}
-                }
-                
-                break;
-            case 1:
-            	if("oz".equalsIgnoreCase(massUnit))
-                {
-                	if("cup".equalsIgnoreCase(volumeUnit))
-                	{
-                		setPressValues(DARK_TIMER, 0.375f);
-                	}
-                	else //oz per ml
-                	{
-                		setPressValues(DARK_TIMER, 0.003f);
-                	}
-                }
-                else //g
-                {
-                	if("cup".equalsIgnoreCase(volumeUnit))
-                	{
-                		setPressValues(DARK_TIMER, 10.5f); //g per cup
-                	}
-                	else
-                	{
-                		setPressValues(DARK_TIMER, 0.089f); //g per ml
-                	}
-                }
-                break;
-            case 2:
-            	if("oz".equalsIgnoreCase(massUnit))
-                {
-                	if("cup".equalsIgnoreCase(volumeUnit))
-                	{
-                		setPressValues(LIGHT_TIMER, 0.025f);
-                	}
-                	else //oz per ml
-                	{
-                		setPressValues(LIGHT_TIMER, 0.002f);
-                	}
-                }
-                else //g
-                {
-                	if("cup".equalsIgnoreCase(volumeUnit))
-                	{
-                		setPressValues(LIGHT_TIMER, 7); //g per cup
-                	}
-                	else
-                	{
-                		setPressValues(LIGHT_TIMER, 0.059f); //g per ml
-                	}
-                }
-                break;
-            default:
-                // Do nothing
-                break;
+    	if(type == 0)
+	        switch (itemPosition)
+	        {
+	            case 0:
+	                if("oz".equalsIgnoreCase(massUnit))
+	                {
+	                	if("cup".equalsIgnoreCase(volumeUnit))
+	                	{
+	                		setPressValues(STANDARD_TIMER, 0.025f);
+	                	}
+	                	else //oz per ml
+	                	{
+	                		setPressValues(STANDARD_TIMER, 0.002f);
+	                	}
+	                }
+	                else //g
+	                {
+	                	if("cup".equalsIgnoreCase(volumeUnit))
+	                	{
+	                		setPressValues(STANDARD_TIMER, 7); //g per cup
+	                	}
+	                	else
+	                	{
+	                		setPressValues(STANDARD_TIMER, 0.059f); //g per ml
+	                	}
+	                }
+	                
+	                break;
+	            case 1:
+	            	if("oz".equalsIgnoreCase(massUnit))
+	                {
+	                	if("cup".equalsIgnoreCase(volumeUnit))
+	                	{
+	                		setPressValues(DARK_TIMER, 0.375f);
+	                	}
+	                	else //oz per ml
+	                	{
+	                		setPressValues(DARK_TIMER, 0.003f);
+	                	}
+	                }
+	                else //g
+	                {
+	                	if("cup".equalsIgnoreCase(volumeUnit))
+	                	{
+	                		setPressValues(DARK_TIMER, 10.5f); //g per cup
+	                	}
+	                	else
+	                	{
+	                		setPressValues(DARK_TIMER, 0.089f); //g per ml
+	                	}
+	                }
+	                break;
+	            case 2:
+	            	if("oz".equalsIgnoreCase(massUnit))
+	                {
+	                	if("cup".equalsIgnoreCase(volumeUnit))
+	                	{
+	                		setPressValues(LIGHT_TIMER, 0.025f);
+	                	}
+	                	else //oz per ml
+	                	{
+	                		setPressValues(LIGHT_TIMER, 0.002f);
+	                	}
+	                }
+	                else //g
+	                {
+	                	if("cup".equalsIgnoreCase(volumeUnit))
+	                	{
+	                		setPressValues(LIGHT_TIMER, 7); //g per cup
+	                	}
+	                	else
+	                	{
+	                		setPressValues(LIGHT_TIMER, 0.059f); //g per ml
+	                	}
+	                }
+	                break;
+	            default:
+	                // Do nothing
+	                break;
         }
+    	else if(type == 3)//Aeropress
+    	{
+    		boolean lIsInverted = false;
+    		if(itemPosition == 0)
+    		{
+    			lIsInverted = false;
+    		}
+    		else
+    		{
+    			lIsInverted = true;
+    		}
+    		accordionView.getSectionByChildId(R.id.cupLayout).setVisibility(View.GONE);
+    		
+			if("oz".equalsIgnoreCase(massUnit))
+			{
+				if("cup".equalsIgnoreCase(volumeUnit))
+				{
+					setAeroPressValues(30000, 0.6f, lIsInverted);//oz per cup
+				}
+				else //oz per ml
+			 	{
+			 		setAeroPressValues(30000, 0.005f,lIsInverted);
+			 	}
+			 }
+			else //g
+			{
+				if("cup".equalsIgnoreCase(volumeUnit))
+				{
+					setAeroPressValues(30000, 17,lIsInverted); //g per cup
+				}
+				else
+				{
+					setAeroPressValues(30000, 0.144f,lIsInverted); //g per ml
+			 	}
+			}
+    	}
+    		
         resetTimer();
         return false;
     }
 
-    private void setAeroPressValues(long aSteepTime, float aRatio)
+    private void setAeroPressValues(long aSteepTime, float aRatio, boolean lIsInverted)
     {
     	this.ratio = aRatio;
         setWeightValues();
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Fine Grind - 2 Aeropress Scoops (~34g)");
-        instructionView
-                .setText("\n1. Remove the plunger and the cap from the chamber."
-                        + "\n\n2. Put a filter in the cap and twist it onto the chamber."
-                        + "\n\n3. Stand the chamber on a sturdy mug."
-                        + "\n\n4. Put two AeroPress scoops of fine-drip grind coffee into the chamber."
-                        + "\n\n5. Pour hot water slowly into the chamber up to the number 2. Use 175F (80C) water for the very best taste."
-                        + "\n\n6. Mix the water and coffee with the stirrer for about 10 seconds."
-                        + "\n\n7. Wet the rubber seal and insert the plunger into the chamber. Gently press down about a quarter of an inch and "
-                        + "maintain that pressure for about 20 to 30 seconds until the plunger bottoms on the coffee. Gentle pressure is the key to "
-                        + "easy AeroPressing."
-                        +"\n\n8. You've just made a double espresso. For American coffee,  top-off the mug with hot water. For a latte, top-off "
-                        +"the mug with hot milk.");
-        // Official AeroPress Instructions
+        
+        if(lIsInverted)
+        {
+        	groundsView.setText("Fine Grind - 1 Aeropress Scoops (~17g)");
+        	instructionView
+            .setText("\n1. Removed cap from the chamber."
+                    + "\n\n2. Insert the plunger such that it is touching the bottom of the number 4."
+                    + "\n\n3. Stand the aeropress upside down on the plunger with the cap opening is facing upward. "
+                    + "\n\n4. Put one AeroPress scoop of fine-drip grind coffee into the chamber. It should reach near the number 3."
+                    + "\n\n5. Pour hot water slowly into the chamber up to the top of the number 2. Use water around 175F (80C)."
+                    + "\n\n6. Mix the water and coffee with the stirrer for about 10 seconds."
+                    + "\n\n7. Allow the coffee to steep for an additional 30 seconds. "
+                    + "\n\n8. Replace the filter paper and screw on the cap tightly."
+                    + "\n\n9. Carefully flip the aeropress on to the mug. Slowly press the plunger for about to 20-30s. "
+                    + "\n\n10. Top off with with hot water as necessary.");
+					// Inverted AeroPress Instructions
+        }
+        else
+        {
+        	groundsView.setText("Fine Grind - 2 Aeropress Scoops (~34g)");
+	        instructionView
+	                .setText("\n1. Remove the plunger and the cap from the chamber."
+	                        + "\n\n2. Put a filter in the cap and twist it onto the chamber."
+	                        + "\n\n3. Stand the chamber on a sturdy mug."
+	                        + "\n\n4. Put two AeroPress scoops of fine-drip grind coffee into the chamber."
+	                        + "\n\n5. Pour hot water slowly into the chamber up to the number 2. Use 175F (80C) water for the very best taste."
+	                        + "\n\n6. Mix the water and coffee with the stirrer for about 10 seconds."
+	                        + "\n\n7. Wet the rubber seal and insert the plunger into the chamber. Gently press down about a quarter of an inch and "
+	                        + "maintain that pressure for about 20 to 30 seconds until the plunger bottoms on the coffee. Gentle pressure is the key to "
+	                        + "easy AeroPressing."
+	                        +"\n\n8. You've just made a double espresso. For American coffee,  top-off the mug with hot water. For a latte, top-off "
+	                        +"the mug with hot milk.");
+        					// Official AeroPress Instructions
+        }
 
     }
 
@@ -653,7 +698,7 @@ public class CoffeeFragment extends Fragment implements
         setTimerLabel(timerStartValue);
         groundsView.setText("Course Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
-                .setText("\n1. Pour hot (not boiling) water into the pot. Leave a minimum of 2,5 cm/1 inch of space at"
+                .setText("\n1. Pour hot (not boiling) water into the pot. Leave a minimum of 2.5 cm/1 inch of space at"
                         + " the top. \n\n2. Stir the brew with a plastic spoon. \n\n3.Place the plunger unit on top of the pot. "
                         + "Turn lid to close off the pour spout opening. Let the coffee brew for at least "
                         + (aSteepTime / 60000)
@@ -714,7 +759,7 @@ public class CoffeeFragment extends Fragment implements
         groundsView.setText("Medium Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1. Place the paper filter into the filter basket. Optional: Preheat the decanter with hot water.\n" +
-                		"\n2. Grind the beans to a medium grind. Use approxately "+aRatio+massUnit+" per "+volumeUnit+".\n"+
+                		"\n2. Grind the beans to a medium grind. Use approximately "+aRatio+massUnit+" per "+volumeUnit+".\n"+
                 		"\n3. Add the required amount of water to the coffee machine.\n" +
                 		"\n4. Turn on the machine and wait a few minutes. Turn off the machine if necessary.");		
 	}

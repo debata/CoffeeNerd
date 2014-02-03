@@ -25,6 +25,10 @@
         <item>Dark</item>
         <item>Light</item>  
     </string-array>
+        <string-array name="aero_types">
+        <item>Standard</item>
+        <item>Inverted</item>
+    </string-array>
     <string-array name="units">
         <item>Grams</item>
         <item>Ounces</item>

@@ -1,7 +1,16 @@
 package com.hashbang.coffeenerd;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
+
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,15 +28,15 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hashbang.coffeepro.R;
 import com.sentaca.android.accordion.widget.AccordionView;
@@ -59,7 +68,14 @@ public class CoffeeFragment extends Fragment implements
     private NumberPicker waterVolumePicker;
     private AccordionView accordionView;
     private RatingBar ratingBar;
-    private Button saveButton;
+    
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+    static final int DATE_DIALOG_ID = 0;
+
+    private TextView mDateDisplay;
+    private ImageButton mPickDate;
    
     private EditText commentView;
     private TextView timerValue;
@@ -83,6 +99,7 @@ public class CoffeeFragment extends Fragment implements
     static boolean isStarted = false;
 
     int type = 0;
+    int subType = 0;
     
     private float ratio;
     String volumeUnit;
@@ -304,30 +321,47 @@ public class CoffeeFragment extends Fragment implements
             }
         });
        
+        mDateDisplay = (TextView) rootView.findViewById(R.id.date_text);
+        
+        final DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener()
+        {
+
+		    public void onDateSet(DatePicker view, int aYear,
+		        int aMonth, int aDay)
+		    {
+	            mYear = aYear;
+	            mMonth = aMonth;
+	            mDay = aDay;
+	            updateDisplay();
+	            loadLog();
+		    }
+		};
+		
+        // get the current date
+        final Calendar c = Calendar.getInstance();
+
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        // display the current date
+        updateDisplay();
+		
+        mPickDate = (ImageButton) rootView.findViewById(R.id.date_button);
+        mPickDate.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+            	DatePickerDialog dialog = new DatePickerDialog(mainActivity, datePickerListener, mYear, mMonth, mDay);
+            	dialog.show();
+            }
+        });
+        
         ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
         ratingBar.setRating(sharedPref.getFloat(RATE_TAG + type, 0f));
 
         commentView = (EditText) rootView.findViewById(R.id.comments);
         commentView.setText(sharedPref.getString(COMMENT_TAG + type, ""));
-
-        saveButton = (Button) rootView.findViewById(R.id.save_button);
-        saveButton.setOnClickListener(new OnClickListener()
-        {
-        	
-        	@Override
-        	public void onClick(View v) 
-        	{
-        		SharedPreferences.Editor editor = sharedPref.edit();
-        		float rating = ratingBar.getRating();
-        		editor.putFloat(RATE_TAG + type, rating);
-        		
-        		String comment = commentView.getText().toString();
-        		editor.putString(COMMENT_TAG + type, comment);
-        		editor.commit();
-        		
-        		Toast.makeText(mainActivity, mainActivity.getResources().getText(R.string.save_msg), Toast.LENGTH_SHORT).show();
-        	}
-        });
         
         switch (type)
         {
@@ -456,9 +490,69 @@ public class CoffeeFragment extends Fragment implements
             default:
                 break;
         }
+        
+        loadLog();
 
         return rootView;
     }
+
+	private void loadLog()
+	{
+		String lLogFileName = buildLogFileName();
+    	
+    	File sdcard = mainActivity.getExternalFilesDir(null);
+
+    	//Get the text file
+    	File file = new File(sdcard,lLogFileName);
+
+    	//Read text from file
+    	StringBuilder commentText = new StringBuilder();
+    	String ratingAsText = "0";
+    	try
+    	{
+    	    BufferedReader br = new BufferedReader(new FileReader(file));
+    	    String line;
+    	    
+    	    int lineCount = 0;
+    	    
+    	    while ((line = br.readLine()) != null)
+    	    {
+    	    	if(lineCount == 0) //Rating
+    	    	{
+    	    		ratingAsText = line;
+    	    	}
+    	    	else
+    	    	{
+	    	        commentText.append(line);
+	    	        commentText.append('\n');
+    	    	}
+    	    	lineCount++;
+    	    }
+    	    
+    	    br.close();
+    	}
+    	catch (Exception e)
+    	{
+    	    Log.d("FileNotFound", e.toString());
+    	}
+    	
+    	ratingBar.setRating(Float.parseFloat(ratingAsText));
+    	commentView.setText(commentText);
+	}
+
+	private String buildLogFileName() {
+		String lLogFileName = ""+ mMonth+"-"+mDay+"-"+mYear+"_"+type;
+    	
+    	if(type == 0 || type == 3) //French Press or Aeropress
+    	{
+    		lLogFileName += "_"+subType+".txt";
+    	}
+    	else
+    	{
+    		lLogFileName +=".txt";
+    	}
+		return lLogFileName;
+	}
     
 
 
@@ -502,10 +596,21 @@ public class CoffeeFragment extends Fragment implements
         }
 	}
 	
+	@Override
+	public void onPause()
+	{
+		outputLogFile();
+		super.onPause();
+	}
+	
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId)
     {
+    	outputLogFile();
+    	subType = itemPosition;
+    	
     	if(type == 0)
+    	{
 	        switch (itemPosition)
 	        {
 	            case 0:
@@ -584,7 +689,8 @@ public class CoffeeFragment extends Fragment implements
 	            default:
 	                // Do nothing
 	                break;
-        }
+	        }
+    	}
     	else if(type == 3)//Aeropress
     	{
     		boolean lIsInverted = false;
@@ -621,7 +727,7 @@ public class CoffeeFragment extends Fragment implements
 			 	}
 			}
     	}
-    		
+    	loadLog();
         resetTimer();
         return false;
     }
@@ -798,4 +904,52 @@ public class CoffeeFragment extends Fragment implements
     {
     	themeColour = aColour;
     }
+    
+    private void updateDisplay() {
+        this.mDateDisplay.setText(
+            new StringBuilder()
+                    // Month is 0 based so add 1
+                    .append(getMonthForInt(mMonth)).append(" ")
+                    .append(mDay).append(", ")
+                    .append(mYear).append(" "));
+    }
+    
+    String getMonthForInt(int num)
+    {
+        String month = "wrong";
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] months = dfs.getMonths();
+        if (num >= 0 && num <= 11 ) {
+            month = months[num];
+        }
+        return month;
+    }
+
+	private void outputLogFile()
+	{
+		String data = ""+ratingBar.getRating()+"\n"+commentView.getText().toString();
+		
+		try
+		{
+			File sdcard = mainActivity.getExternalFilesDir(null);
+			String lLogFileName = buildLogFileName();
+		    //Get the text file
+			File root =  new File(sdcard, "");
+			if (!root.exists())
+			{
+			    root.mkdirs();
+			}
+			File gpxfile = new File(root, lLogFileName);
+			FileWriter writer = new FileWriter(gpxfile);
+			writer.append(data);
+			writer.flush();
+			writer.close();
+		}
+		catch(IOException e)
+	    {
+	         e.printStackTrace();
+	    }
+	}
+
+
 }

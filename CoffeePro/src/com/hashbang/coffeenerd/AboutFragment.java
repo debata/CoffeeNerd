@@ -69,7 +69,7 @@ public class AboutFragment extends Fragment
 			{
 				Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto",lMainActivity.getResources().getString(R.string.email), null));
 				emailIntent.putExtra(Intent.EXTRA_SUBJECT, "CoffeeNerd v"+version);
-				emailIntent.putExtra(Intent.EXTRA_TEXT, Build.DEVICE+":"+android.os.Build.VERSION.SDK_INT);
+				emailIntent.putExtra(Intent.EXTRA_TEXT, "Phone Info: "+Build.DEVICE+"|"+android.os.Build.VERSION.SDK_INT);
 				startActivity(Intent.createChooser(emailIntent, "Send email..."));	
 			}
 		});

@@ -9,8 +9,10 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,7 +50,16 @@ public class AboutFragment extends Fragment
         lMainActivity = getActivity();
         lMainActivity.getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         
-        final Resources res = lMainActivity.getResources();
+        PackageInfo pInfo = null;
+		try
+		{
+			pInfo = lMainActivity.getPackageManager().getPackageInfo(lMainActivity.getPackageName(), 0);
+		}
+		catch (NameNotFoundException e1)
+		{
+			e1.printStackTrace();
+		}
+        final String version = pInfo.versionName;
         
         emailButton = (Button) rootView.findViewById(R.id.email_button);
         emailButton.setOnClickListener(new OnClickListener()
@@ -57,7 +68,8 @@ public class AboutFragment extends Fragment
 			public void onClick(View v)
 			{
 				Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto",lMainActivity.getResources().getString(R.string.email), null));
-				emailIntent.putExtra(Intent.EXTRA_SUBJECT, "CoffeeNerd");
+				emailIntent.putExtra(Intent.EXTRA_SUBJECT, "CoffeeNerd v"+version);
+				emailIntent.putExtra(Intent.EXTRA_TEXT, Build.DEVICE+":"+android.os.Build.VERSION.SDK_INT);
 				startActivity(Intent.createChooser(emailIntent, "Send email..."));	
 			}
 		});

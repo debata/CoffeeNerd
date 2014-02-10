@@ -94,8 +94,6 @@ public class CoffeeFragment extends Fragment implements
     final private static long LIGHT_TIMER = 120000L;
     private static int themeColour = Color.WHITE;
 
-    protected static final String COMMENT_TAG = "Comment";
-    protected static final String RATE_TAG = "Rate";
     static boolean isStarted = false;
 
     int type = 0;
@@ -358,10 +356,8 @@ public class CoffeeFragment extends Fragment implements
         });
         
         ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
-        ratingBar.setRating(sharedPref.getFloat(RATE_TAG + type, 0f));
 
         commentView = (EditText) rootView.findViewById(R.id.comments);
-        commentView.setText(sharedPref.getString(COMMENT_TAG + type, ""));
         
         switch (type)
         {

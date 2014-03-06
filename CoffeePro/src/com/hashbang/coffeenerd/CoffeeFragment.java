@@ -224,6 +224,7 @@ public class CoffeeFragment extends Fragment implements
 
         // Set up the picker for number of cups (Cannot be done in XML)
         waterVolumePicker = (NumberPicker) rootView.findViewById(R.id.cupsPicker);
+        waterVolumePicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         if("cup".equalsIgnoreCase(volumeUnit))
         {
 	        waterVolumePicker.setMinValue(1);

@@ -61,13 +61,15 @@ public class MainActivity extends SherlockFragmentActivity
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
+        
+        
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         isPortrait = sharedPref.getBoolean(PreferencesFragment.PERSPECTIVE_TAG, true);
         if(isPortrait)

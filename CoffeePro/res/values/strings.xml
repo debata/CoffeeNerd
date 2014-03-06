@@ -69,4 +69,7 @@
     <string name="support_greeting">Thank you for supporting\nCoffeeNerd!</string>
     <string name="btc_button">Bitcoin</string>
     <string name="paypal_button">Paypal</string>
+    <string name="perspective_label">Perspective Mode</string>
+    <string name="portrait">Portrait</string>
+    <string name="landscape">Landscape</string>
 </resources>

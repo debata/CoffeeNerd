@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ public class PreferencesFragment extends Fragment
     
     private Activity mainActivity;
     private RadioGroup volumeGroup;
+    private RadioGroup perspectiveGroup;
     private RadioGroup massGroup;
     private RadioGroup colourGroup;
     
@@ -37,6 +39,7 @@ public class PreferencesFragment extends Fragment
     public final static String VOLUME_TAG = "VolumeUnit";
     public final static String MASS_TAG = "MassUnit";
     public final static String THEME_TAG = "Theme";
+    public final static String PERSPECTIVE_TAG = "Perspective";
     
     
     @Override
@@ -169,6 +172,42 @@ public class PreferencesFragment extends Fragment
 				{
 					editor.putString(THEME_TAG, "dark");
 					editor.commit();
+				}
+				
+			}
+		});
+        
+        perspectiveGroup = (RadioGroup) rootView.findViewById(R.id.perspective_group);
+        boolean isPortrait = sharedPref.getBoolean(PreferencesFragment.PERSPECTIVE_TAG, true);
+        
+        if(isPortrait)
+        {
+        	perspectiveGroup.check(R.id.portrait_option);
+        }
+        else
+        {
+        	perspectiveGroup.check(R.id.landscape_option);
+        }
+        
+        perspectiveGroup.setOnCheckedChangeListener(new OnCheckedChangeListener()
+        {
+			
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId)
+			{
+				
+				SharedPreferences.Editor editor = sharedPref.edit();
+				if(checkedId == R.id.portrait_option)
+				{
+					editor.putBoolean(PERSPECTIVE_TAG, true);
+					editor.commit();
+					mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				}
+				else
+				{
+					editor.putBoolean(PERSPECTIVE_TAG, false);
+					editor.commit();
+					mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				}
 				
 			}

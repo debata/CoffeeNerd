@@ -18,6 +18,19 @@
 	    <RadioButton android:id="@+id/light_theme"
 	        android:text="@string/light"/>
 	</RadioGroup>
+	<TextView android:text="@string/perspective_label"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+	<RadioGroup android:id="@+id/perspective_group"
+	    android:orientation="horizontal"
+	    android:layout_width="wrap_content" android:layout_height="wrap_content">
+	    <RadioButton android:id="@+id/portrait_option"
+	        android:text="@string/portrait"
+	        android:checked="true"/>
+	    <RadioButton android:id="@+id/landscape_option"
+	        android:text="@string/landscape"/>
+	</RadioGroup>
 	<TextView android:text="@string/mass_unit"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:textStyle="bold"

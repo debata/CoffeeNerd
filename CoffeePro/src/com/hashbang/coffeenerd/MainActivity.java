@@ -3,6 +3,7 @@ package com.hashbang.coffeenerd;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class MainActivity extends SherlockFragmentActivity
     String[] title;
     String[] subtitle;
     String themeVal = "dark";
+    boolean isPortrait = true;
 
     int[] icon;
     private CharSequence mDrawerTitle;
@@ -65,7 +67,17 @@ public class MainActivity extends SherlockFragmentActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        isPortrait = sharedPref.getBoolean(PreferencesFragment.PERSPECTIVE_TAG, true);
+        if(isPortrait)
+        {
+        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        else
+        {
+        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
         
         themeVal = sharedPref.getString(PreferencesFragment.THEME_TAG, "dark");
         // Get the view from drawer_main.xml

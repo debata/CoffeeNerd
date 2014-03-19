@@ -48,7 +48,7 @@
     <string name="grams">g</string>
     <string name="ounces">oz</string>
     <string name="ratio_label">Ratio</string>
-    <string name="volume_label">Water Volume</string>
+    <string name="volume_label">Water "AndroidManifest.xml"Volume</string>
     <string name="totalCoffee">Total Coffee Weight</string>
     <string name="millilitres">ml</string>
     <string name="cups">cup</string>

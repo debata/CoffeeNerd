@@ -47,10 +47,12 @@
     <string name="mass_unit">Coffee Mass Unit</string>
     <string name="grams">g</string>
     <string name="ounces">oz</string>
+    <string name="ratio_label">Ratio</string>
+    <string name="volume_label">Water Volume</string>
+    <string name="totalCoffee">Total Coffee Weight</string>
     <string name="millilitres">ml</string>
     <string name="cups">cup</string>
     <string name="totalCups">Number of Cups</string>
-    <string name="totalCoffee">Total Coffee Weight</string>
     <string name="comments">Comments</string>
 	<string name="refs">References</string>
     <string name="bodum_link"><a href="http://www.bodum.com">Bodum</a></string>

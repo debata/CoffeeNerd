@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,10 +62,10 @@ public class CoffeeFragment extends Fragment implements
     private Button resetButton;
     private TextView instructionView;
     private TextView groundsView;
-    private TextView groundWeightView;
+    private EditText groundWeightView;
     private TextView totalGroundsView;
     private TextView totalGroundsUnitsView;
-    private TextView massLabel;
+    private TextView ratioLabel;
     private TextView volumeLabel;
     private NumberPicker waterVolumePicker;
     private AccordionView accordionView;
@@ -179,21 +181,21 @@ public class CoffeeFragment extends Fragment implements
                 "Partial WakeLock");
         wl.setReferenceCounted(false);
 
+        Resources res = mainActivity.getResources();
         sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         
         volumeUnit = sharedPref.getString(PreferencesFragment.VOLUME_TAG, "ml");
         massUnit = sharedPref.getString(PreferencesFragment.MASS_TAG, "g");
         
         volumeLabel = (TextView) rootView.findViewById(R.id.volumeLabel);
-        volumeLabel.setText(volumeUnit);
-        massLabel = (TextView) rootView.findViewById(R.id.massLabel);
-        massLabel.setText(massUnit);
+        volumeLabel.setText(res.getString(R.string.volume_label)+" ("+volumeUnit+")");
+        ratioLabel = (TextView) rootView.findViewById(R.id.ratioLabel);
+        ratioLabel.setText(res.getString(R.string.ratio_label)+" ("+massUnit+"/"+volumeUnit+")");
         
         // Set up the dropdown menu in the action bar
         ActionBar mActionbar = mainActivity.getActionBar();
         mActionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         // Populate Drop down
-        Resources res = mainActivity.getResources();
         
 	    ArrayAdapter<String> lTypeAdapter = null;
 	    
@@ -215,7 +217,29 @@ public class CoffeeFragment extends Fragment implements
         instructionView = (TextView) rootView
                 .findViewById(R.id.instructionsTextView);
         groundsView = (TextView) rootView.findViewById(R.id.groundsTextView);
-        groundWeightView = (TextView) rootView.findViewById(R.id.groundsWeight);
+        groundWeightView = (EditText) rootView.findViewById(R.id.groundsWeight);
+        groundWeightView.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				setWeightValues(waterVolumePicker.getValue());
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
         totalGroundsView = (TextView) rootView.findViewById(R.id.totalGrounds);
         totalGroundsUnitsView = (TextView) rootView
                 .findViewById(R.id.totalGroundsUnits);
@@ -732,13 +756,13 @@ public class CoffeeFragment extends Fragment implements
     private void setAeroPressValues(long aSteepTime, float aRatio, boolean lIsInverted)
     {
     	this.ratio = aRatio;
-        setWeightValues();
+        setWeightValues(aRatio);
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
         
         if(lIsInverted)
         {
-        	groundsView.setText("Fine Grind - 1 Aeropress Scoops (~17g)");
+        	groundsView.setText("Recommended: Fine Grind - 1 Aeropress Scoops (~17g)");
         	instructionView
             .setText("\n1. Removed cap from the chamber."
                     + "\n\n2. Insert the plunger such that it is touching the bottom of the number 4."
@@ -754,7 +778,7 @@ public class CoffeeFragment extends Fragment implements
         }
         else
         {
-        	groundsView.setText("Fine Grind - 2 Aeropress Scoops (~34g)");
+        	groundsView.setText("Recommended: Fine Grind - 2 Aeropress Scoops (~34g)");
 	        instructionView
 	                .setText("\n1. Remove the plunger and the cap from the chamber."
 	                        + "\n\n2. Put a filter in the cap and twist it onto the chamber."
@@ -775,10 +799,10 @@ public class CoffeeFragment extends Fragment implements
     private void setChemexValues(long aSteepTime, float aRatio)
     {
         this.ratio = aRatio;
-        setWeightValues();
+        setWeightValues(aRatio);
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Medium Grind - "+aRatio+massUnit+" per "+volumeUnit);
+        groundsView.setText("Recommended: Medium Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1. Open the Chemex-Bonded® Coffee Filter into a cone. One side should have three layers. Place the cone in the top of "
                         + "your coffeemaker with the thick portion toward the pouring spout"
@@ -796,10 +820,10 @@ public class CoffeeFragment extends Fragment implements
     private void setPressValues(long aSteepTime, float aRatio)
     {
         this.ratio = aRatio;
-        setWeightValues();
+        setWeightValues(aRatio);
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Course Grind - "+aRatio+massUnit+" per "+volumeUnit);
+        groundsView.setText("Recommended: Course Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1. Pour hot (not boiling) water into the pot. Leave a minimum of 2.5 cm/1 inch of space at"
                         + " the top. \n\n2. Stir the brew with a plastic spoon. \n\n3.Place the plunger unit on top of the pot. "
@@ -814,10 +838,10 @@ public class CoffeeFragment extends Fragment implements
     private void setSiphonValues(long aSteepTime, float aRatio)
     {
     	ratio = aRatio;
-        setWeightValues();
+        setWeightValues(aRatio);
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Course Grind - "+aRatio+massUnit+" per "+volumeUnit);
+        groundsView.setText("Recommended: Course Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1. Measure the amount of water you are going to brew and place it in the lower chamber of the vacuum pot. Begin heating "
                         + "the water until it is almost boiling, or 190 to 195 degrees."
@@ -837,10 +861,10 @@ public class CoffeeFragment extends Fragment implements
 	private void setHarioValues(int aSteepTime, float aRatio)
 	{
 		 this.ratio = aRatio;
-	        setWeightValues();
+	        setWeightValues(aRatio);
 	        timerStartValue = aSteepTime;
 	        setTimerLabel(timerStartValue);
-	        groundsView.setText("Medium-Fine Grind - "+aRatio+massUnit+" per "+volumeUnit);
+	        groundsView.setText("Recommended: Medium-Fine Grind - "+aRatio+massUnit+" per "+volumeUnit);
 	        instructionView
 	                .setText("\n1. Fold the paper ﬁlter along the seams and place inside the cone. Add coffee grounds (medium-ﬁne grind) for your " +
 	                		"required servings and shake it lightly to level. 10-12g is normally good for one serving (120ml). The attached measuring spoon = 12g / 1 spoon. " +
@@ -856,10 +880,10 @@ public class CoffeeFragment extends Fragment implements
 	private void setDripValues(int aSteepTime, float aRatio)
 	{
 		this.ratio = aRatio;
-        setWeightValues();
+        setWeightValues(aRatio);
         timerStartValue = aSteepTime;
         setTimerLabel(timerStartValue);
-        groundsView.setText("Medium Grind - "+aRatio+massUnit+" per "+volumeUnit);
+        groundsView.setText("Recommended: Medium Grind - "+aRatio+massUnit+" per "+volumeUnit);
         instructionView
                 .setText("\n1. Place the paper filter into the filter basket. Optional: Preheat the decanter with hot water.\n" +
                 		"\n2. Grind the beans to a medium grind. Use approximately "+aRatio+massUnit+" per "+volumeUnit+".\n"+
@@ -877,16 +901,18 @@ public class CoffeeFragment extends Fragment implements
                 + String.format("%02d", milliseconds));
     }
 
-    private void setWeightValues()
+    private void setWeightValues(float aRatio)
     {
         int volumeValue = waterVolumePicker.getValue();
+        groundWeightView.setText(""+aRatio);
         setWeightValues(volumeValue);
     }
 
     private void setWeightValues(int volume)
     {
-	    groundWeightView.setText(Float.toString(ratio));
-	    float totalMass = ratio * (float)volume;
+	    float setRatio = Float.parseFloat(groundWeightView.getText().toString());
+	    
+	    float totalMass = setRatio * (float)volume;
 	    if("ml".equalsIgnoreCase(volumeUnit))
 	    {
 	    	totalMass *= 5f;
